@@ -1,0 +1,118 @@
+.github-analyzer-container {
+    padding: 3rem 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    color: #fff;
+    min-height: 80vh;
+}
+
+.github-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.github-header h1 {
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+.github-header p {
+    color: #b0b0b0;
+    font-size: 1.1rem;
+}
+
+.analyzer-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.analyze-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(45deg, #2ea44f, #238636);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.analyze-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(46, 164, 79, 0.4);
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid #2ea44f;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+    color: #b0b0b0;
+}
+
+.languages-section {
+    margin-bottom: 2rem;
+}
+
+.lang-bar-container {
+    margin-bottom: 1rem;
+}
+
+.lang-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.progress-bg {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #2ea44f;
+    border-radius: 4px;
+    transition: width 1s ease-in-out;
+}
+
+.ai-feedback-section {
+    background: rgba(46, 164, 79, 0.1);
+    border-left: 4px solid #2ea44f;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.ai-feedback-section h3 {
+    color: #2ea44f;
+    margin-bottom: 1rem;
+}
+
+.feedback-text {
+    line-height: 1.6;
+    color: #d0d0d0;
+}

@@ -1,0 +1,92 @@
+/* src/pages/LearnGlobalLanguages.css */
+
+.language-roadmap-page {
+  background-color: var(--background-dark);
+  color: var(--text-light);
+  min-height: calc(100vh - 4rem);
+  padding: 4rem 5%;
+}
+
+.language-roadmap-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.language-roadmap-header h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  text-shadow: 0 0 15px var(--glow-color);
+  margin-bottom: 1rem;
+}
+
+.language-roadmap-header p {
+  font-size: 1.2rem;
+  color: var(--text-medium);
+  line-height: 1.6;
+}
+
+.language-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.language-card {
+  background-color: var(--card-background);
+  padding: 2.5rem 2rem;
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--text-light);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-color);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.language-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+  border-color: var(--accent-primary);
+}
+
+.language-card h3 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  color: var(--accent-primary);
+}
+
+.language-card p {
+    color: var(--text-medium);
+    line-height: 1.6;
+    flex-grow: 1;
+}
+
+.view-language-link {
+    margin-top: 1.5rem;
+    color: var(--accent-secondary);
+    font-weight: 600;
+    text-align: right;
+    transition: color 0.3s ease;
+}
+
+.language-card:hover .view-language-link {
+    color: var(--accent-primary);
+}
+
+.language-card.disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.language-card.disabled .view-language-link {
+  color: #6B7280; /* A muted color for disabled links */
+}
+

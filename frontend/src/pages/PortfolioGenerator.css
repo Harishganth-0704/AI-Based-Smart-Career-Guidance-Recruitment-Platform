@@ -1,0 +1,138 @@
+.portfolio-generator-page {
+    padding: 3rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    color: #fff;
+    min-height: 85vh;
+}
+
+.portfolio-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.portfolio-header h1 {
+    font-size: 2.5rem;
+    background: linear-gradient(90deg, #ff007a, #7a00ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+}
+
+.portfolio-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
+}
+
+.portfolio-form-card, .portfolio-preview-card {
+    padding: 2rem;
+}
+
+.portfolio-form-card h2, .portfolio-preview-card h2 {
+    color: #ff007a;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    border-bottom: 1px solid rgba(255, 0, 122, 0.3);
+    padding-bottom: 0.5rem;
+}
+
+.portfolio-form-card .form-group {
+    margin-bottom: 1.2rem;
+}
+
+.portfolio-form-card input, .portfolio-form-card textarea {
+    width: 100%;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-radius: 8px;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+}
+
+.portfolio-form-card input:focus, .portfolio-form-card textarea:focus {
+    outline: none;
+    border-color: #ff007a;
+}
+
+.generate-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(45deg, #ff007a, #7a00ff);
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-top: 1rem;
+}
+
+.generate-btn:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(255, 0, 122, 0.4);
+}
+
+.generate-btn:disabled {
+    background: #555;
+    cursor: not-allowed;
+}
+
+.preview-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.portfolio-iframe {
+    width: 100%;
+    height: 500px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    background: #fff; /* Ensuring iframe background is white by default if dark mode fails */
+    margin-bottom: 1rem;
+}
+
+.download-code-btn {
+    width: 100%;
+    padding: 12px;
+    background: #00ff88;
+    color: #000;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.download-code-btn:hover {
+    background: #00d4ff;
+}
+
+.empty-preview, .loading-state {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #b0b0b0;
+    text-align: center;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+@media (max-width: 1024px) {
+    .portfolio-layout {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,76 @@
+/* src/App.css */
+
+/* 1. Define the new vibrant and professional color scheme */
+:root {
+  --primary-color: #4F46E5;    /* Vibrant Indigo */
+  --secondary-color: #14B8A6;   /* Bright Teal */
+  --dark-text: #111827;         /* Near Black for high contrast */
+  --light-text: #FFFFFF;
+  --bg-light: #F9FAFB;         /* Off-white background */
+  --bg-white: #FFFFFF;
+  --border-color: #E5E7EB;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* 2. Global body styles */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-light);
+  color: var(--dark-text);
+  font-size: 18px; /* Increased base font size for better readability globally */
+  line-height: 1.6;
+}
+
+/* 3. Main content area padding to account for fixed navbar */
+main {
+  padding-top: 70px; /* Matches navbar height */
+}
+
+/* 4. Reusable banner style for all pages */
+.page-banner {
+  height: 40vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: var(--light-text);
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+/* Dark overlay for better text readability on banners */
+.page-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.page-banner h1, .page-banner p {
+  position: relative;
+  z-index: 2;
+}
+
+.page-banner h1 {
+  font-size: 3.5rem;
+  margin: 0;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.page-banner p {
+  font-size: 1.25rem;
+  margin-top: 0.5rem;
+  max-width: 600px;
+}
+

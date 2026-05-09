@@ -1,0 +1,223 @@
+.hr-dashboard-page {
+    padding: 2rem 5%;
+    max-width: 1400px;
+    margin: 0 auto;
+    color: #fff;
+    min-height: 100vh;
+}
+
+.hr-header {
+    margin-bottom: 3rem;
+}
+
+.hr-header-content h1 {
+    font-size: 2.5rem;
+    color: #8b5cf6;
+    margin-bottom: 0.5rem;
+}
+
+.hr-header-content p {
+    color: #b0b0b0;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.hr-stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.hr-stat-box {
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.hr-stat-box h3 {
+    color: #b0b0b0;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.hr-filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+}
+
+.hr-search-input {
+    flex: 1;
+    padding: 12px 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.hr-search-input:focus {
+    outline: none;
+    border-color: #8b5cf6;
+}
+
+.hr-role-select {
+    padding: 12px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.candidates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.candidate-card {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.candidate-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
+}
+
+.candidate-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.candidate-avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.candidate-title h2 {
+    margin: 0 0 0.2rem 0;
+    font-size: 1.3rem;
+}
+
+.candidate-role {
+    color: #06b6d4;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.candidate-metrics {
+    display: flex;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.metric {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.metric-label {
+    font-size: 0.75rem;
+    color: #b0b0b0;
+    text-transform: uppercase;
+}
+
+.metric-value {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.match-score {
+    color: #00ff88;
+}
+
+.candidate-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex: 1; /* Pushes footer down */
+}
+
+.skill-pill {
+    background: rgba(139, 92, 246, 0.15);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    color: #e0d4fc;
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+}
+
+.candidate-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+}
+
+.web3-badge {
+    font-size: 0.8rem;
+    color: #b0b0b0;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: monospace;
+}
+
+.hire-btn {
+    background: #8b5cf6;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.hire-btn:hover {
+    background: #7c3aed;
+}
+
+.no-candidates {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: #b0b0b0;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+    .hr-filters {
+        flex-direction: column;
+    }
+}

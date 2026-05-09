@@ -1,0 +1,45 @@
+/* src/components/Footer.css */
+
+.footer-container {
+  background-color: #1e1e30; /* --card-background */
+  color: #b0b0b0; /* --text-medium */
+  padding: 2rem 5%;
+  border-top: 1px solid #33334d; /* --border-color */
+  text-align: center;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.footer-links a {
+  color: #b0b0b0;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #00e676; /* --accent-primary */
+}
+
+.footer-links span {
+  color: #33334d; /* --border-color */
+}
+
+@media (min-width: 768px) {
+  .footer-content {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}

@@ -1,0 +1,96 @@
+/* src/pages/MobileUIDesignerRoadmap.css */
+
+.roadmap-page-container {
+  background-color: var(--background-dark);
+  color: var(--text-light);
+  min-height: 100vh;
+  padding: 4rem 5%;
+}
+
+.roadmap-page-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.roadmap-page-header h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  margin-bottom: 1rem;
+  text-shadow: 0 0 15px var(--glow-color);
+}
+
+.roadmap-page-header p {
+  font-size: 1.2rem;
+  color: var(--text-medium);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* --- THIS IS THE UPDATED SECTION --- */
+.roadmap-stages {
+  max-width: 1200px; /* Increased max-width to make cards longer */
+  margin: 0 auto;
+}
+/* ------------------------------------ */
+
+.stage-card {
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
+}
+
+.stage-header {
+  padding: 1.5rem 2rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stage-header h2 {
+  font-size: 1.6rem;
+  color: var(--accent-primary);
+  margin: 0;
+}
+
+.stage-toggle {
+  font-size: 2rem;
+  color: var(--accent-secondary);
+  transition: transform 0.3s ease;
+}
+
+.stage-card.active .stage-toggle {
+  transform: rotate(45deg);
+}
+
+.stage-content {
+  padding: 0 2rem 2rem 2rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.stage-content p {
+  color: var(--text-medium);
+  line-height: 1.7;
+}
+
+.stage-resources-button {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.8rem 2.5rem;
+  background-color: var(--accent-secondary);
+  color: var(--text-light);
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.stage-resources-button:hover {
+  background-color: #9a6ce1;
+  transform: translateY(-2px);
+}
+

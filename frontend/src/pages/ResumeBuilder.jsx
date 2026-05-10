@@ -129,7 +129,7 @@ const ResumeBuilder = () => {
                 setResumeFile(file);
                 setError('');
             } else {
-                setError('Invalid file type. Only .pdf, .docx, .txt, .jpg, or .png files are supported.'); // --- UPDATED ---
+                setError('Invalid file type. Only .pdf, .docx, .txt, .jpg, or .png files are supported.');
                 setResumeFile(null);
             }
         }
@@ -137,6 +137,27 @@ const ResumeBuilder = () => {
 
     const handleExploreClick = () => {
         navigate('/roadmaps');
+    };
+
+    const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
+    const [studyPlan, setStudyPlan] = useState(null);
+
+    const handleGenerateStudyPlan = async () => {
+        if (!analysisResult || !analysisResult.gapAnalysis) return;
+        
+        setIsGeneratingPlan(true);
+        try {
+            const { generateStudyPlan: apiGenerateStudyPlan } = await import('../services/api');
+            const response = await apiGenerateStudyPlan(getTargetRole(), analysisResult.gapAnalysis);
+            if (response.success) {
+                setStudyPlan(response.studyPlan);
+            }
+        } catch (err) {
+            console.error('Study Plan Error:', err);
+            alert('Failed to generate study plan.');
+        } finally {
+            setIsGeneratingPlan(false);
+        }
     };
 
     return (
@@ -181,13 +202,11 @@ const ResumeBuilder = () => {
                             ref={fileInputRef} 
                             onChange={handleFileChange} 
                             style={{ display: 'none' }}
-                            // --- UPDATED FILE TYPES ---
                             accept=".txt,.pdf,.doc,.docx,.jpg,.jpeg,.png,text/plain,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/jpeg,image/png"
                         />
                         <div className="file-prompt-content">
                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="upload-icon"><path fillRule="evenodd" d="M10.5 3.75a2.25 2.25 0 00-2.25 2.25v10.19l-1.72-1.72a.75.75 0 00-1.06 1.06l3 3a.75.75 0 001.06 0l3-3a.75.75 0 10-1.06-1.06l-1.72 1.72V6a2.25 2.25 0 00-2.25-2.25z" clipRule="evenodd" /><path d="M16.5 3.75a.75.75 0 00-1.5 0v6a.75.75 0 001.5 0V3.75z" /></svg>
                             {resumeFile ? <span>File Selected: <strong>{resumeFile.name}</strong></span> : <span>Click to upload or drop your resume here</span>}
-                            {/* --- UPDATED HELP TEXT --- */}
                             <p className="file-types">Supports .pdf, .docx, .txt, .jpg, .png</p>
                         </div>
                     </div>
@@ -208,25 +227,62 @@ const ResumeBuilder = () => {
 
             {analysisResult && (
                 <div className="results-container">
-                    <h2>Analysis Results</h2>
+                    <div className="results-header" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <h2>Analysis Results</h2>
+                        <button 
+                            className="btn btn-secondary plan-btn"
+                            type="button" 
+                            onClick={handleGenerateStudyPlan}
+                            disabled={isGeneratingPlan}
+                        >
+                            {isGeneratingPlan ? 'Creating Plan...' : '📅 Generate 7-Day Study Plan'}
+                        </button>
+                    </div>
+                    
                     <p className="feedback-summary">{analysisResult.matchAnalysis}</p>
                     
                     {analysisResult.bestFitRole !== getTargetRole() && (
                          <div className="feedback-columns">
                              <div className="feedback-column">
-                                 <h3>Gap Analysis for {getTargetRole()}</h3>
-                                <ul>
+                                  <h3>Gap Analysis for {getTargetRole()}</h3>
+                                <ul className="gap-list">
                                      {analysisResult.gapAnalysis.map((point, index) => <li key={index}>{point}</li>)}
                                  </ul>
                             </div>
                             <div className="feedback-column">
-                                 <h3>🚀 Learning Suggestions</h3>
-                                <ul>
+                                  <h3>🚀 Learning Suggestions</h3>
+                                <ul className="suggestion-list">
                                      {analysisResult.learningSuggestions.map((suggestion, index) => <li key={index}>{suggestion}</li>)}
                                  </ul>
                             </div>
                          </div>
                     )}
+
+                    {studyPlan && (
+                        <div className="study-plan-section fade-in">
+                            <h3 className="section-title">📅 Your Personalized 7-Day Study Plan</h3>
+                            <div className="study-grid">
+                                {studyPlan.map((item) => (
+                                    <div key={item.day} className="study-card">
+                                        <div className="day-badge">Day {item.day}</div>
+                                        <h4>{item.topic}</h4>
+                                        <ul>
+                                            {item.concepts.map((c, i) => <li key={i}>{c}</li>)}
+                                        </ul>
+                                        <a 
+                                            href={`https://www.youtube.com/results?search_query=${encodeURIComponent(item.youtubeSearch)}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="youtube-link"
+                                        >
+                                            📺 Watch Tutorials
+                                        </a>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
                      <div className="explore-button-container">
                         <button className="btn btn-primary" onClick={handleExploreClick}>
                             Explore Job Based Roadmaps

@@ -28,6 +28,12 @@ import GitHubAnalyzer from './pages/GitHubAnalyzer';
 import ATSResumeMaker from './pages/ATSResumeMaker';
 import PortfolioGenerator from './pages/PortfolioGenerator';
 import HRDashboard from './pages/HRDashboard';
+import VideoScript from './pages/VideoScript';
+import CheatSheet from './pages/CheatSheet';
+import SalaryInsight from './pages/SalaryInsight';
+import Outreach from './pages/Outreach';
+import Certificates from './pages/Certificates';
+import SkillQuiz from './pages/SkillQuiz';
 import AIChatbot from './components/AIChatbot';
 
 // --- Import All Job-Based Roadmap Main Pages ---
@@ -82,6 +88,12 @@ function App() {
             <Route path="/portfolio-generator" element={<PortfolioGenerator />} />
             <Route path="/u/:username" element={<PortfolioGenerator />} />
             <Route path="/hr-portal" element={<HRDashboard />} />
+            <Route path="/video-script" element={<VideoScript />} />
+            <Route path="/cheat-sheet" element={<CheatSheet />} />
+            <Route path="/salary-insight" element={<SalaryInsight />} />
+            <Route path="/outreach" element={<Outreach />} />
+            <Route path="/certificates" element={<Certificates />} />
+            <Route path="/skill-quiz" element={<SkillQuiz />} />
 
             {/* --- Main Job-Based Roadmap Routes --- */}
             <Route path="/data-scientist" element={<DataScientistRoadmap />} />

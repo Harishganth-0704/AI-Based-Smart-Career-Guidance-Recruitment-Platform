@@ -1,0 +1,90 @@
+.salary-insight-page {
+    padding: 3rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    color: #fff;
+}
+
+.salary-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+@media (max-width: 850px) {
+    .salary-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.fetch-btn {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.fetch-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+}
+
+.insight-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.insight-content {
+    line-height: 1.8;
+    color: #d0d0d0;
+    font-size: 1rem;
+}
+
+.bold-text {
+    color: #10b981;
+    font-weight: bold;
+    margin-top: 1.2rem;
+}
+
+.expert-badge {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    border: 1px solid #10b981;
+}
+
+.negotiation-tip {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: rgba(245, 158, 11, 0.1);
+    border-left: 4px solid #f59e0b;
+    font-size: 0.95rem;
+    border-radius: 4px;
+    color: #e0e0e0;
+}
+
+.empty-salary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    opacity: 0.3;
+}
+
+.money-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}

@@ -16,12 +16,28 @@ const Dashboard = () => {
         badges: ['Newcomer']
     });
 
+    const [dailyTip, setDailyTip] = useState('TIP: Keep learning and building! | PULSE: 📈');
+    const [profileStrength, setProfileStrength] = useState(0);
+
     useEffect(() => {
         const fetchHistory = async () => {
             try {
                 const response = await api.get('/career/history');
                 if (response.success) {
                     setHistory(response.assessments);
+                    
+                    // Calculate Profile Strength based on activity
+                    let score = 20; // Base score
+                    score += response.assessments.length * 10; // 10 pts per activity
+                    
+                    const stored = localStorage.getItem('careerCraftGamification');
+                    if (stored) {
+                        const parsed = JSON.parse(stored);
+                        score += (parsed.badges.length - 1) * 15; // 15 pts per badge
+                        score += parsed.streak * 5; // 5 pts per streak day
+                    }
+                    
+                    setProfileStrength(Math.min(score, 100)); // Max 100%
                 }
             } catch (err) {
                 setError('Failed to load history.');
@@ -30,7 +46,18 @@ const Dashboard = () => {
                 setIsLoading(false);
             }
         };
+
+        const fetchTip = async () => {
+            try {
+                const response = await api.get('/career/daily-tip');
+                if (response.success) setDailyTip(response.tip);
+            } catch (err) {
+                console.error('Failed to fetch tip');
+            }
+        };
+
         fetchHistory();
+        fetchTip();
 
         // Gamification Logic
         const storedData = localStorage.getItem('careerCraftGamification');
@@ -77,6 +104,10 @@ const Dashboard = () => {
 
     if (isLoading) return <div className="dashboard-loading"><div className="loader"></div></div>;
 
+    const tipContent = dailyTip.split('|');
+    const tipText = tipContent[0].replace('TIP:', '').trim();
+    const pulseText = tipContent[1] ? tipContent[1].replace('PULSE:', '').trim() : '🚀';
+
     return (
         <div className="dashboard-container">
             <header className="dashboard-header">
@@ -94,8 +125,32 @@ const Dashboard = () => {
                 </div>
             </header>
 
-            {/* Gamification Banner */}
-            <div className="gamification-banner glass">
+            {/* AI Insight Bar */}
+            <div className="ai-insight-bar fade-in">
+                <span className="insight-label">🤖 AI DAILY INSIGHT:</span>
+                <span className="insight-text">{tipText}</span>
+                <span className="insight-pulse">Market Pulse: {pulseText}</span>
+            </div>
+
+            {/* Profile Strength & Gamification Row */}
+            <div className="dashboard-top-row">
+                <div className="strength-card glass fade-in">
+                    <div className="strength-header">
+                        <h3>AI Profile Strength</h3>
+                        <span className="strength-percentage">{profileStrength}%</span>
+                    </div>
+                    <div className="strength-bar-container">
+                        <div className="strength-bar-fill" style={{width: `${profileStrength}%`}}></div>
+                    </div>
+                    <p className="strength-tip">
+                        {profileStrength < 50 ? '💡 Tip: Take a Skill Quiz to boost your score!' : 
+                         profileStrength < 80 ? '🔥 Great! Analyze your resume to reach Elite level.' : 
+                         '🌟 Elite Status: Your profile is recruiter-ready!'}
+                    </p>
+                </div>
+
+                {/* Gamification Banner */}
+                <div className="gamification-banner glass">
                 <div className="gamification-stats">
                     <div className="gamify-item">
                         <span className="gamify-icon">🔥</span>
@@ -119,6 +174,7 @@ const Dashboard = () => {
                             <span key={index} className="badge">{badge}</span>
                         ))}
                     </div>
+                </div>
                 </div>
             </div>
 

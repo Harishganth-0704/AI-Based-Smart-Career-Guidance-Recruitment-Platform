@@ -1,86 +1,137 @@
 import React, { useState } from 'react';
+import { generateCoverLetter } from '../services/api';
 import './CoverLetter.css';
 
+const careerRoles = [
+  'Data Scientist',
+  'AI Engineer',
+  'Machine Learning Engineer',
+  'Cloud Architect',
+  'Cybersecurity',
+  'Game Developer',
+  'Mobile UI Designer',
+  'Full-Stack Developer',
+  'Python Developer',
+  'JavaScript Developer',
+  'React Developer',
+  'SQL Developer',
+  'Java Developer',
+  'C++ Developer',
+  'Write your own...'
+];
+
 const CoverLetter = () => {
-    const [jobTitle, setJobTitle] = useState('');
-    const [companyName, setCompanyName] = useState('');
-    const [skills, setSkills] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [generatedLetter, setGeneratedLetter] = useState('');
+  const [selectedRole, setSelectedRole] = useState(careerRoles[0]);
+  const [customRole, setCustomRole] = useState('');
+  const [resumeContent, setResumeContent] = useState('');
+  const [generatedLetter, setGeneratedLetter] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-    const handleGenerate = (e) => {
-        e.preventDefault();
-        if (!jobTitle || !companyName) return;
+  const getTargetRole = () =>
+    selectedRole === 'Write your own...' ? customRole : selectedRole;
 
-        setIsLoading(true);
-        // Simulating AI Generation delay
-        setTimeout(() => {
-            const letter = `Dear Hiring Manager at ${companyName},\n\nI am writing to express my strong interest in the ${jobTitle} position at ${companyName}. With a solid foundation in ${skills || 'software development, problem-solving, and continuous learning'}, I am confident in my ability to make an immediate impact on your team.\n\nThroughout my academic and professional journey, I have developed a passion for building scalable solutions and delivering high-quality user experiences. My background aligns perfectly with the requirements of the ${jobTitle} role, and I am particularly drawn to ${companyName}'s innovative approach and industry leadership.\n\nThank you for considering my application. I have attached my resume for your review and look forward to the opportunity to discuss how my skills and experiences align with your team's needs.\n\nSincerely,\n[Your Name]`;
-            setGeneratedLetter(letter);
-            setIsLoading(false);
-        }, 2000);
-    };
+  const handleGenerate = async () => {
+    const role = getTargetRole();
+    if (!role.trim()) {
+      setError('Please select or enter a job role.');
+      return;
+    }
 
-    const handleCopy = () => {
-        navigator.clipboard.writeText(generatedLetter);
-        alert('Cover Letter copied to clipboard!');
-    };
+    setIsLoading(true);
+    setError('');
+    setGeneratedLetter('');
 
-    return (
-        <div className="cover-letter-page">
-            <header className="cl-header">
-                <h1>AI Cover Letter Generator ✉️</h1>
-                <p>Generate a professional, tailored cover letter in seconds using AI.</p>
-            </header>
+    try {
+      const response = await generateCoverLetter(role, resumeContent);
+      if (response.success && response.coverLetter) {
+        setGeneratedLetter(response.coverLetter);
+      } else {
+        throw new Error('Failed to generate cover letter');
+      }
+    } catch (err) {
+      setError('Failed to generate cover letter. Please try again.');
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-            <div className="cl-container">
-                <form className="cl-form" onSubmit={handleGenerate}>
-                    <div className="form-group">
-                        <label>Target Job Title</label>
-                        <input 
-                            type="text" 
-                            placeholder="e.g. Frontend Developer" 
-                            value={jobTitle} 
-                            onChange={(e) => setJobTitle(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Target Company</label>
-                        <input 
-                            type="text" 
-                            placeholder="e.g. Google, Startup Inc." 
-                            value={companyName} 
-                            onChange={(e) => setCompanyName(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Your Key Skills (Optional)</label>
-                        <input 
-                            type="text" 
-                            placeholder="e.g. React, Node.js, Teamwork" 
-                            value={skills} 
-                            onChange={(e) => setSkills(e.target.value)}
-                        />
-                    </div>
-                    <button type="submit" className="generate-btn" disabled={isLoading || !jobTitle || !companyName}>
-                        {isLoading ? 'Generating with AI...' : 'Generate Cover Letter 🚀'}
-                    </button>
-                </form>
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(generatedLetter);
+    alert('Cover letter copied to clipboard!');
+  };
 
-                {generatedLetter && (
-                    <div className="cl-result">
-                        <div className="result-header">
-                            <h3>Your Cover Letter</h3>
-                            <button className="copy-btn" onClick={handleCopy}>Copy Text</button>
-                        </div>
-                        <textarea className="letter-textarea" readOnly value={generatedLetter}></textarea>
-                    </div>
-                )}
+  return (
+    <div className="cover-letter-page">
+      <header className="page-header">
+        <h1>AI Cover Letter Generator</h1>
+        <p>Generate a professional, role-specific cover letter in seconds.</p>
+      </header>
+
+      <div className="content-container">
+        <div className="input-section">
+          <div className="form-group">
+            <label>Target Job Role:</label>
+            <select
+              value={selectedRole}
+              onChange={(e) => setSelectedRole(e.target.value)}
+            >
+              {careerRoles.map((role) => (
+                <option key={role}>{role}</option>
+              ))}
+            </select>
+          </div>
+
+          {selectedRole === 'Write your own...' && (
+            <div className="form-group">
+              <label>Enter Custom Role:</label>
+              <input
+                type="text"
+                value={customRole}
+                onChange={(e) => setCustomRole(e.target.value)}
+                placeholder="e.g., Senior DevOps Engineer"
+              />
             </div>
+          )}
+
+          <div className="form-group">
+            <label>Paste your Resume content (Optional but recommended):</label>
+            <textarea
+              rows="10"
+              value={resumeContent}
+              onChange={(e) => setResumeContent(e.target.value)}
+              placeholder="Paste your skills, experience, and achievements here for a more personalized letter..."
+            ></textarea>
+          </div>
+
+          <button 
+            className="generate-btn" 
+            onClick={handleGenerate} 
+            disabled={isLoading}
+          >
+            {isLoading ? 'Generating Professional Letter...' : 'Generate Cover Letter'}
+          </button>
+          
+          {error && <p className="error-message">{error}</p>}
         </div>
-    );
+
+        {generatedLetter && (
+          <div className="result-section">
+            <div className="result-header">
+              <h2>Your Generated Cover Letter</h2>
+              <button className="copy-btn" onClick={copyToClipboard}>
+                📋 Copy Text
+              </button>
+            </div>
+            <div className="letter-paper">
+              <pre>{generatedLetter}</pre>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default CoverLetter;

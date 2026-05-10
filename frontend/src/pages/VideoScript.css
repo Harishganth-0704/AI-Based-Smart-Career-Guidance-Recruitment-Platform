@@ -1,0 +1,103 @@
+.video-script-page {
+    padding: 3rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    color: #fff;
+}
+
+.script-container {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+@media (max-width: 850px) {
+    .script-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.input-panel {
+    padding: 2rem;
+}
+
+.result-panel {
+    padding: 2rem;
+    background: rgba(0, 0, 0, 0.2);
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.gen-btn {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.gen-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+}
+
+.output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.script-content {
+    font-family: 'Courier New', Courier, monospace;
+    line-height: 1.6;
+    color: #e0e0e0;
+    font-size: 1.1rem;
+    flex-grow: 1;
+}
+
+.teleprompter-tip {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: rgba(139, 92, 246, 0.1);
+    border-left: 4px solid #8b5cf6;
+    font-size: 0.9rem;
+    border-radius: 4px;
+}
+
+.empty-script {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    opacity: 0.3;
+}
+
+.camera-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.copy-icon-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.error {
+    color: #ef4444;
+    margin-top: 1rem;
+    text-align: center;
+}

@@ -1,8 +1,40 @@
 .dashboard-container {
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    color: #fff;
+    padding: 2rem 5%;
+    color: var(--text-light);
+    min-height: 100vh;
+}
+
+.ai-insight-bar {
+    background: linear-gradient(90deg, rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.2));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.95rem;
+}
+
+.insight-label {
+    color: #06b6d4;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.insight-text {
+    color: #e0e0e0;
+    flex-grow: 1;
+}
+
+.insight-pulse {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 4px 12px;
+    border-radius: 20px;
+    color: #00ff88;
+    font-weight: bold;
+    font-size: 0.85rem;
+    white-space: nowrap;
 }
 
 .dashboard-header {
@@ -89,17 +121,66 @@
     gap: 2rem;
 }
 
+.dashboard-top-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.strength-card {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.strength-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.strength-percentage {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #00ff88;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+}
+
+.strength-bar-container {
+    height: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.strength-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00ff88, #00d4ff);
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+    transition: width 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.strength-tip {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    margin: 0;
+}
+
 /* Gamification Styles */
 .gamification-banner {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem 2.5rem;
-    margin-bottom: 2rem;
     background: linear-gradient(135deg, rgba(255, 204, 0, 0.1) 0%, rgba(255, 136, 0, 0.1) 100%);
     border: 1px solid rgba(255, 204, 0, 0.3);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
+
 
 .gamification-stats {
     display: flex;

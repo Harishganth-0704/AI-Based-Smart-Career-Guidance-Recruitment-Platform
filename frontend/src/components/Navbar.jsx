@@ -59,6 +59,24 @@ const Navbar = () => {
               <NavLink to="/github-analyzer" className={({ isActive }) => (isActive ? 'dropdown-item active' : 'dropdown-item')} onClick={() => setIsMenuOpen(false)}>
                 GitHub Analyzer
               </NavLink>
+              <NavLink to="/video-script" className={({ isActive }) => (isActive ? 'dropdown-item active' : 'dropdown-item')} onClick={() => setIsMenuOpen(false)}>
+                Video Resume Script
+              </NavLink>
+              <NavLink to="/cheat-sheet" className={({ isActive }) => (isActive ? 'dropdown-item active' : 'dropdown-item')} onClick={() => setIsMenuOpen(false)}>
+                Interview Cheat Sheet
+              </NavLink>
+              <NavLink to="/salary-insight" className={({ isActive }) => (isActive ? 'dropdown-item active' : 'dropdown-item')} onClick={() => setIsMenuOpen(false)}>
+                Salary & Negotiation
+              </NavLink>
+              <NavLink to="/outreach" className={({ isActive }) => (isActive ? 'dropdown-item active' : 'dropdown-item')} onClick={() => setIsMenuOpen(false)}>
+                Networking Suite
+              </NavLink>
+              <NavLink to="/certificates" className={({ isActive }) => (isActive ? 'dropdown-item active' : 'dropdown-item')} onClick={() => setIsMenuOpen(false)}>
+                My Achievements
+              </NavLink>
+              <NavLink to="/skill-quiz" className={({ isActive }) => (isActive ? 'dropdown-item active' : 'dropdown-item')} onClick={() => setIsMenuOpen(false)}>
+                Skill Assessment (Quiz)
+              </NavLink>
             </div>
           </div>
 

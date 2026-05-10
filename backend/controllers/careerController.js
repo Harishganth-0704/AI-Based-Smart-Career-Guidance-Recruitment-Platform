@@ -164,13 +164,16 @@ exports.analyzeResume = async (req, res) => {
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
         const prompt = `
-            You are an expert career coach. Analyze the attached resume and compare it against the target role: "${targetRole}".
-            Return a JSON object with:
+            You are an expert career coach and resume reviewer.
+            A candidate has submitted a resume for the target role: "${targetRole}".
+            
+            Provide a professional analysis for the target role "${targetRole}".
+            Return ONLY a valid JSON object with no markdown formatting:
             {
-                "bestFitRole": "The role that best fits the resume",
+                "bestFitRole": "The role that best fits this candidate",
                 "matchAnalysis": "A 2-3 sentence analysis of how well they fit the target role.",
-                "gapAnalysis": ["List of missing skills/experience"],
-                "learningSuggestions": ["Specific steps to improve"]
+                "gapAnalysis": ["Missing skill 1", "Missing skill 2", "Missing skill 3"],
+                "learningSuggestions": ["Improvement step 1", "Improvement step 2", "Improvement step 3"]
             }
         `;
 
@@ -190,7 +193,7 @@ exports.analyzeResume = async (req, res) => {
         const data = jsonMatch ? JSON.parse(jsonMatch[0]) : { success: false, message: "Failed to parse AI response" };
 
         // Save to Database
-        if (data.success) {
+        if (data.bestFitRole) {
             try {
                 const newAssessment = new Assessment({
                     skills: `Resume Analysis for ${targetRole}`,
@@ -273,6 +276,248 @@ exports.submitAnswer = async (req, res) => {
         res.json(data);
     } catch (error) {
         console.error('Interview Feedback Error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+exports.generateCoverLetter = async (req, res) => {
+    try {
+        const { targetRole, resumeContent } = req.body;
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+        const prompt = `
+            You are a professional hiring manager. Create a high-quality, persuasive cover letter for a candidate.
+            Target Role: "${targetRole}"
+            Candidate Resume Details: "${resumeContent || 'Use general professional skills'}"
+
+            Instructions:
+            - Make it professional and enthusiastic.
+            - Focus on how the candidate's skills match the target role.
+            - Keep it around 300-400 words.
+            - Return ONLY the text of the cover letter.
+        `;
+
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text().trim();
+
+        res.json({ success: true, coverLetter: text });
+    } catch (error) {
+        console.error('Cover Letter Generation Error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+exports.generateStudyPlan = async (req, res) => {
+    try {
+        const { targetRole, missingSkills } = req.body;
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+        const prompt = `
+            A candidate wants to become a "${targetRole}" but lacks these skills: "${missingSkills.join(', ')}".
+            Create a structured 7-day intensive study plan to bridge these gaps.
+            For each day, provide:
+            - Focus Topic
+            - Key concepts to learn
+            - A specific YouTube search query for tutorials.
+
+            Return the response as a valid JSON array of objects:
+            [
+              {
+                "day": 1,
+                "topic": "Topic Name",
+                "concepts": ["Concept 1", "Concept 2"],
+                "youtubeSearch": "Search query"
+              }
+            ]
+            Return ONLY the JSON array.
+        `;
+
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text();
+        const jsonMatch = text.match(/\[[\s\S]*\]/);
+        const data = jsonMatch ? JSON.parse(jsonMatch[0]) : [];
+
+        res.json({ success: true, studyPlan: data });
+    } catch (error) {
+        console.error('Study Plan Error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+exports.getDailyTip = async (req, res) => {
+    try {
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+        const prompt = `
+            Give a single, powerful career advice or job market insight for a tech student in 2026.
+            It should be 2 sentences max. 
+            Also provide a "Market Pulse" emoji.
+            Format: "TIP: [Advice] | PULSE: [Emoji]"
+        `;
+
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text().trim();
+
+        res.json({ success: true, tip: text });
+    } catch (error) {
+        res.json({ success: false, tip: "TIP: Keep building projects and learning new tech! | PULSE: 🚀" });
+    }
+};
+
+exports.generateVideoScript = async (req, res) => {
+    try {
+        const { targetRole, skills } = req.body;
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+        const prompt = `
+            Generate a professional 60-second video resume script for a candidate applying for: "${targetRole}".
+            The candidate has these skills: "${skills}".
+            
+            The script should have:
+            1. **The Hook (0-10s):** Engaging introduction.
+            2. **The Value (10-40s):** Highlighting skills and achievements.
+            3. **The Call to Action (40-60s):** Professional closing.
+
+            Provide the output as a clear script with timing markers.
+            Format:
+            [00:00 - 00:10] Introduction: ...
+            [00:10 - 00:40] Core Skills: ...
+            [00:40 - 01:00] Conclusion: ...
+        `;
+
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text().trim();
+
+        res.json({ success: true, script: text });
+    } catch (error) {
+        console.error('Video Script Error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+exports.getCompanyCheatSheet = async (req, res) => {
+    try {
+        const { companyName, targetRole } = req.body;
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+        const prompt = `
+            You are an expert interview coach. Generate an "Interview Cheat Sheet" for a candidate interviewing at "${companyName}" for the role of "${targetRole}".
+            Provide:
+            1. **Company DNA:** 2 sentences about their culture/values.
+            2. **Top 5 Technical/Behavioral Questions:** Specific to this company and role.
+            3. **The Winning Strategy:** One unique tip to stand out in their interview.
+
+            Format the response clearly with headings.
+        `;
+
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text().trim();
+
+        res.json({ success: true, cheatSheet: text });
+    } catch (error) {
+        console.error('Cheat Sheet Error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+exports.getSalaryInsight = async (req, res) => {
+    try {
+        const { targetRole, location } = req.body;
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+        const prompt = `
+            Act as a Compensation Expert. Provide salary insights for "${targetRole}" in "${location}".
+            Return the following:
+            1. **Market Range:** Approximate annual salary for Entry, Mid, and Senior levels.
+            2. **Top Paying Skills:** 3 skills that increase salary for this role.
+            3. **Negotiation Script:** A 2-sentence professional script to use when an HR offers a lower salary.
+
+            Format the response clearly.
+        `;
+
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text().trim();
+
+        res.json({ success: true, salaryInsight: text });
+    } catch (error) {
+        console.error('Salary Error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+exports.generateOutreach = async (req, res) => {
+    try {
+        const { targetRole, purpose } = req.body;
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+        const prompt = `
+            Act as a Networking Expert. Write a professional outreach message for a candidate interested in a "${targetRole}" role.
+            Purpose: "${purpose}"
+            
+            Provide two versions:
+            1. **LinkedIn Message:** (Short, max 300 characters for connection request).
+            2. **Professional Email:** (Clear subject line and body).
+
+            Keep the tone professional yet engaging.
+        `;
+
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text().trim();
+
+        res.json({ success: true, outreach: text });
+    } catch (error) {
+        console.error('Outreach Error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+exports.generateSkillQuiz = async (req, res) => {
+    try {
+        const { topic } = req.body;
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+        const prompt = `
+            Generate a technical MCQ quiz on the topic: "${topic}".
+            Provide exactly 5 questions.
+            Each question must have 4 options and 1 correct answer.
+            Return ONLY a valid JSON array of objects with this structure:
+            [
+              {
+                "id": 1,
+                "question": "...",
+                "options": ["A", "B", "C", "D"],
+                "correctAnswer": "index of correct option (0-3)"
+              }
+            ]
+            Do not include markdown backticks.
+        `;
+
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        let text = response.text().trim();
+        
+        // Clean up text in case AI adds markdown
+        text = text.replace(/```json/g, '').replace(/```/g, '').trim();
+
+        const quizData = JSON.parse(text);
+        res.json({ success: true, quiz: quizData });
+    } catch (error) {
+        console.error('Quiz Error:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 };

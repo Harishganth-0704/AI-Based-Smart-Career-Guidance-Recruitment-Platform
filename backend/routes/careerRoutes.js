@@ -23,4 +23,28 @@ router.get('/history', careerController.getHistory);
 router.post('/interview/start', careerController.startInterview);
 router.post('/interview/feedback', careerController.submitAnswer);
 
+// Route for AI Cover Letter
+router.post('/cover-letter', careerController.generateCoverLetter);
+
+// Route for AI Study Plan
+router.post('/study-plan', careerController.generateStudyPlan);
+
+// Route for Daily Tip
+router.get('/daily-tip', careerController.getDailyTip);
+
+// Route for Video Resume Script
+router.post('/video-script', careerController.generateVideoScript);
+
+// Route for Company Cheat Sheet
+router.post('/cheat-sheet', careerController.getCompanyCheatSheet);
+
+// Route for Salary Insight
+router.post('/salary-insight', careerController.getSalaryInsight);
+
+// Route for Networking Outreach
+router.post('/outreach', careerController.generateOutreach);
+
+// Route for Skill Quiz
+router.post('/skill-quiz', careerController.generateSkillQuiz);
+
 module.exports = router;

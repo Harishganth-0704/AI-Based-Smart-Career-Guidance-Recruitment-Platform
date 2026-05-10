@@ -45,7 +45,47 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 2. Features Section */}
+      {/* 2. Advanced AI Toolbox Section */}
+      <section className="advanced-tools-section fade-in">
+        <div className="section-header">
+            <h2>🚀 Advanced AI Career Toolbox</h2>
+            <p>Go beyond roadmaps with our specialized professional AI agents.</p>
+        </div>
+        <div className="tools-preview-grid">
+            <div className="tool-mini-card glass">
+                <span className="tool-icon">💰</span>
+                <h4>Salary Coach</h4>
+                <p>AI-powered market range and negotiation scripts.</p>
+            </div>
+            <div className="tool-mini-card glass">
+                <span className="tool-icon">✉️</span>
+                <h4>Networking Suite</h4>
+                <p>Draft professional LinkedIn & Email outreach.</p>
+            </div>
+            <div className="tool-mini-card glass">
+                <span className="tool-icon">📑</span>
+                <h4>Company Cheat Sheets</h4>
+                <p>Get the edge with company-specific interview prep.</p>
+            </div>
+            <div className="tool-mini-card glass">
+                <span className="tool-icon">🎬</span>
+                <h4>Video Resume</h4>
+                <p>Generate perfect 60-second intro scripts.</p>
+            </div>
+            <div className="tool-mini-card glass">
+                <span className="tool-icon">🧠</span>
+                <h4>Skill Assessment</h4>
+                <p>Earn verified gold badges through AI quizzes.</p>
+            </div>
+            <div className="tool-mini-card glass">
+                <span className="tool-icon">📄</span>
+                <h4>Cover Letter</h4>
+                <p>Instant professional letters for any role.</p>
+            </div>
+        </div>
+      </section>
+
+      {/* 3. Features Section */}
       <section className="features-section">
         <h2>Why CareerCraft?</h2>
         <div className="features-grid">

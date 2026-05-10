@@ -79,4 +79,74 @@ export const submitInterviewAnswer = async (targetRole, question, answer) => {
     }
 };
 
+export const generateCoverLetter = async (targetRole, resumeContent) => {
+    try {
+        const response = await api.post('/career/cover-letter', { targetRole, resumeContent });
+        return response.data;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+    }
+};
+
+export const generateStudyPlan = async (targetRole, missingSkills) => {
+    try {
+        const response = await api.post('/career/study-plan', { targetRole, missingSkills });
+        return response.data;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+    }
+};
+
+export const generateVideoScript = async (targetRole, skills) => {
+    try {
+        const response = await api.post('/career/video-script', { targetRole, skills });
+        return response.data;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+    }
+};
+
+export const getCompanyCheatSheet = async (companyName, targetRole) => {
+    try {
+        const response = await api.post('/career/cheat-sheet', { companyName, targetRole });
+        return response.data;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+    }
+};
+
+export const getSalaryInsight = async (targetRole, location) => {
+    try {
+        const response = await api.post('/career/salary-insight', { targetRole, location });
+        return response.data;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+    }
+};
+
+export const generateOutreach = async (targetRole, purpose) => {
+    try {
+        const response = await api.post('/career/outreach', { targetRole, purpose });
+        return response.data;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+    }
+};
+
+export const generateSkillQuiz = async (topic) => {
+    try {
+        const response = await api.post('/career/skill-quiz', { topic });
+        return response.data;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+    }
+};
+
 export default api;

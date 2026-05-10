@@ -15,7 +15,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <NavLink to="/" className="navbar-logo">
-          CareerCraft
+          Career Path AI
         </NavLink>
         
         <div className={`navbar-links ${isMenuOpen ? 'active' : ''}`}>

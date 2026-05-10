@@ -1,7 +1,7 @@
 <div align="center">
   <img src="https://raw.githubusercontent.com/Harishganth-0704/AI-Based-Smart-Career-Guidance-Recruitment-Platform/main/frontend/public/vite.svg" width="100" height="100" alt="CareerCraft Logo" />
   
-  # 🚀 CareerCraft: AI-Powered Career Path Recommendation
+  # 🚀 AI-Powered Career Path Recommendation
   
   **Your Ultimate Career Compass & B2B Recruitment Platform**
   

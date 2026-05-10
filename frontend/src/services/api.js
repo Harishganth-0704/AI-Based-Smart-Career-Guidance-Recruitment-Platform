@@ -9,6 +9,20 @@ const api = axios.create({
     },
 });
 
+// Add a request interceptor
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
 export const getCareerRecommendations = async (skills, interests) => {
     try {
         const response = await api.post('/career/recommend', { skills, interests });
@@ -142,6 +156,36 @@ export const generateOutreach = async (targetRole, purpose) => {
 export const generateSkillQuiz = async (topic) => {
     try {
         const response = await api.post('/career/skill-quiz', { topic });
+        return response.data;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+    }
+};
+
+export const getHistory = async () => {
+    try {
+        const response = await api.get('/career/history');
+        return response.data;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+    }
+};
+
+export const updateStats = async (stats) => {
+    try {
+        const response = await api.put('/auth/stats', stats);
+        return response.data;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+    }
+};
+
+export const getLeaderboard = async () => {
+    try {
+        const response = await api.get('/auth/leaderboard');
         return response.data;
     } catch (error) {
         console.error('API Error:', error);

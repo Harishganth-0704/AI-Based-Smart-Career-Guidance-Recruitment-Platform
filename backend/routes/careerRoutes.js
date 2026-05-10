@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const careerController = require('../controllers/careerController');
+const { protect } = require('../middleware/authMiddleware');
 const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
 
 // Route to get career recommendations based on skills
-router.post('/recommend', careerController.getRecommendations);
+router.post('/recommend', protect, careerController.getRecommendations);
 
 // Route for the chatbot
 router.post('/chat', careerController.chat);
@@ -17,7 +18,7 @@ router.get('/jobs', careerController.getJobs);
 router.post('/resume/analyze', upload.single('resume'), careerController.analyzeResume);
 
 // Route to get assessment history
-router.get('/history', careerController.getHistory);
+router.get('/history', protect, careerController.getHistory);
 
 // Routes for Mock Interview
 router.post('/interview/start', careerController.startInterview);

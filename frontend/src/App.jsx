@@ -59,41 +59,71 @@ import AWSRoadmap from './pages/skills/AWSRoadmap';
 import CRoadmap from './pages/skills/CRoadmap';
 import GolangRoadmap from './pages/skills/GolangRoadmap';
 import BashRoadmap from './pages/skills/BashRoadmap';
+import Leaderboard from './pages/Leaderboard';
 
 // --- Import All Resource Pages ---
 
+import { AuthProvider, AuthContext } from './context/AuthContext';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import { useContext } from 'react';
+import { Navigate } from 'react-router-dom';
+
+const ProtectedRoute = ({ children }) => {
+  const { user, loading } = useContext(AuthContext);
+  if (loading) return <div className="loading-screen">Loading...</div>;
+  if (!user) return <Navigate to="/login" />;
+  return children;
+};
+
 function App() {
   return (
-    <Router>
-      <div className="app-container">
-        <Navbar />
-        <main className="main-content">
-          <Routes>
-            {/* --- Core Pages --- */}
-            <Route path="/" element={<Home />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/roadmaps" element={<Roadmap />} />
-            <Route path="/skill-roadmap" element={<SkillRoadmap />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/assessment" element={<Assessment />} />
-            <Route path="/resume-builder" element={<ResumeBuilder />} />
-            <Route path="/cover-letter" element={<CoverLetter />} />
-            <Route path="/jobs" element={<Jobs />} />
-            <Route path="/mock-interview" element={<MockInterview />} />
-            <Route path="/languages" element={<LearnGlobalLanguages />} />
-            <Route path="/languages/:languageId" element={<LanguageRoadmap />} />
-            <Route path="/project-generator" element={<ProjectGenerator />} />
-            <Route path="/github-analyzer" element={<GitHubAnalyzer />} />
-            <Route path="/ats-resume" element={<ATSResumeMaker />} />
-            <Route path="/portfolio-generator" element={<PortfolioGenerator />} />
-            <Route path="/u/:username" element={<PortfolioGenerator />} />
-            <Route path="/hr-portal" element={<HRDashboard />} />
-            <Route path="/video-script" element={<VideoScript />} />
-            <Route path="/cheat-sheet" element={<CheatSheet />} />
-            <Route path="/salary-insight" element={<SalaryInsight />} />
-            <Route path="/outreach" element={<Outreach />} />
-            <Route path="/certificates" element={<Certificates />} />
-            <Route path="/skill-quiz" element={<SkillQuiz />} />
+    <AuthProvider>
+      <Router>
+        <div className="app-container">
+          <Navbar />
+          <main className="main-content">
+            <Routes>
+              {/* --- Core Pages --- */}
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/assessment" element={
+                <ProtectedRoute>
+                  <Assessment />
+                </ProtectedRoute>
+              } />
+
+              <Route path="/roadmaps" element={<Roadmap />} />
+              <Route path="/skill-roadmap" element={<SkillRoadmap />} />
+              <Route path="/about" element={<About />} />
+              
+              <Route path="/resume-builder" element={<ResumeBuilder />} />
+              <Route path="/cover-letter" element={<CoverLetter />} />
+              <Route path="/jobs" element={<Jobs />} />
+              <Route path="/mock-interview" element={<MockInterview />} />
+              <Route path="/languages" element={<LearnGlobalLanguages />} />
+              <Route path="/languages/:languageId" element={<LanguageRoadmap />} />
+              <Route path="/project-generator" element={<ProjectGenerator />} />
+              <Route path="/github-analyzer" element={<GitHubAnalyzer />} />
+              <Route path="/ats-resume" element={<ATSResumeMaker />} />
+              <Route path="/portfolio-generator" element={<PortfolioGenerator />} />
+              <Route path="/u/:username" element={<PortfolioGenerator />} />
+              <Route path="/hr-portal" element={<HRDashboard />} />
+              <Route path="/video-script" element={<VideoScript />} />
+              <Route path="/cheat-sheet" element={<CheatSheet />} />
+              <Route path="/salary-insight" element={<SalaryInsight />} />
+              <Route path="/outreach" element={<Outreach />} />
+              <Route path="/certificates" element={<Certificates />} />
+              <Route path="/skill-quiz" element={<SkillQuiz />} />
+              <Route path="/leaderboard" element={<Leaderboard />} />
 
             {/* --- Main Job-Based Roadmap Routes --- */}
             <Route path="/data-scientist" element={<DataScientistRoadmap />} />
@@ -160,7 +190,8 @@ function App() {
         <Footer />
         <AIChatbot />
       </div>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 }
 

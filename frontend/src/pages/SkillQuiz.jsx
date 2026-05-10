@@ -49,7 +49,7 @@ const SkillQuiz = () => {
         }
     };
 
-    const calculateScore = () => {
+    const calculateScore = async () => {
         let correct = 0;
         quiz.forEach((q, index) => {
             if (parseInt(answers[index]) === parseInt(q.correctAnswer)) {
@@ -60,17 +60,14 @@ const SkillQuiz = () => {
         setScore(finalScore);
         setIsFinished(true);
 
-        // Update badges if score is high
+        // Update badges and points if score is high
         if (finalScore >= 80) {
-            const stored = localStorage.getItem('careerCraftGamification');
-            if (stored) {
-                const parsed = JSON.parse(stored);
+            try {
+                const { updateStats } = await import('../services/api');
                 const badge = `${topic} Master 🏅`;
-                if (!parsed.badges.includes(badge)) {
-                    parsed.badges.push(badge);
-                    parsed.points += 200;
-                    localStorage.setItem('careerCraftGamification', JSON.stringify(parsed));
-                }
+                await updateStats({ points: 200, badge });
+            } catch (err) {
+                console.error("Failed to update stats after quiz", err);
             }
         }
     };

@@ -1,14 +1,23 @@
 // src/components/Navbar.jsx
 
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 import './Navbar.css';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+    setIsMenuOpen(false);
   };
 
   return (
@@ -22,10 +31,13 @@ const Navbar = () => {
           <NavLink to="/" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} onClick={() => setIsMenuOpen(false)}>
             Home
           </NavLink>
-          <NavLink to="/dashboard" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} onClick={() => setIsMenuOpen(false)}>
-            Dashboard
-          </NavLink>
+          {user && (
+            <NavLink to="/dashboard" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} onClick={() => setIsMenuOpen(false)}>
+              Dashboard
+            </NavLink>
+          )}
 
+          {/* ... existing dropdowns ... */}
           <div className="dropdown">
             <span className="nav-link dropdown-toggle">Roadmaps</span>
             <div className="dropdown-content">
@@ -80,25 +92,23 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className="dropdown">
-            <span className="nav-link dropdown-toggle">Career</span>
-            <div className="dropdown-content">
-              <NavLink to="/jobs" className={({ isActive }) => (isActive ? 'dropdown-item active' : 'dropdown-item')} onClick={() => setIsMenuOpen(false)}>
-                Find Jobs
-              </NavLink>
-              <NavLink to="/mock-interview" className={({ isActive }) => (isActive ? 'dropdown-item active' : 'dropdown-item')} onClick={() => setIsMenuOpen(false)}>
-                Mock Interview
-              </NavLink>
-            </div>
-          </div>
-
           <NavLink to="/languages" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} onClick={() => setIsMenuOpen(false)}>
             Languages
           </NavLink>
           
-          <NavLink to="/hr-portal" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} onClick={() => setIsMenuOpen(false)}>
-            HR Portal
-          </NavLink>
+          <div className="auth-nav-links">
+            {user ? (
+              <div className="user-profile-nav">
+                <span className="user-name">Hi, {user.name.split(' ')[0]}</span>
+                <button onClick={handleLogout} className="logout-btn">Logout</button>
+              </div>
+            ) : (
+              <>
+                <NavLink to="/login" className="nav-link login-link" onClick={() => setIsMenuOpen(false)}>Login</NavLink>
+                <NavLink to="/signup" className="nav-btn signup-btn" onClick={() => setIsMenuOpen(false)}>Get Started</NavLink>
+              </>
+            )}
+          </div>
         </div>
 
         <div className="hamburger" onClick={toggleMenu}>

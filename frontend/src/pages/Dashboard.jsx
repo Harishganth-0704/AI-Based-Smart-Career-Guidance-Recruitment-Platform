@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import api from '../services/api';
+import api, { updateStats } from '../services/api';
+import { AuthContext } from '../context/AuthContext';
 import './Dashboard.css';
 
 const Dashboard = () => {
+    const { user } = useContext(AuthContext);
     const [history, setHistory] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [copySuccess, setCopySuccess] = useState('');
 
     const [gamification, setGamification] = useState({
-        points: 0,
-        streak: 1,
-        lastLogin: new Date().toLocaleDateString(),
-        badges: ['Newcomer']
+        points: user?.points || 0,
+        streak: user?.streak || 1,
+        badges: user?.badges || ['Newcomer 🎯']
     });
 
     const [dailyTip, setDailyTip] = useState('TIP: Keep learning and building! | PULSE: 📈');
@@ -27,23 +28,52 @@ const Dashboard = () => {
                     setHistory(response.assessments);
                     
                     // Calculate Profile Strength based on activity
-                    let score = 20; // Base score
-                    score += response.assessments.length * 10; // 10 pts per activity
+                    let score = 20; 
+                    score += response.assessments.length * 10; 
+                    score += (gamification.badges.length - 1) * 15; 
+                    score += gamification.streak * 5; 
                     
-                    const stored = localStorage.getItem('careerCraftGamification');
-                    if (stored) {
-                        const parsed = JSON.parse(stored);
-                        score += (parsed.badges.length - 1) * 15; // 15 pts per badge
-                        score += parsed.streak * 5; // 5 pts per streak day
-                    }
-                    
-                    setProfileStrength(Math.min(score, 100)); // Max 100%
+                    setProfileStrength(Math.min(score, 100));
                 }
             } catch (err) {
                 setError('Failed to load history.');
-                console.error(err);
             } finally {
                 setIsLoading(false);
+            }
+        };
+
+        const syncGamification = async () => {
+            if (!user) return;
+            
+            const lastLogin = new Date(user.lastLogin).toLocaleDateString();
+            const today = new Date().toLocaleDateString();
+            
+            if (lastLogin !== today) {
+                // Check if it's a consecutive day
+                const diffTime = Math.abs(new Date(today) - new Date(lastLogin));
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                let newStreak = user.streak;
+                let bonusPoints = 50; // Daily login bonus
+
+                if (diffDays === 1) {
+                    newStreak += 1;
+                } else if (diffDays > 1) {
+                    newStreak = 1;
+                }
+
+                try {
+                    const res = await updateStats({ points: bonusPoints, streak: newStreak });
+                    if (res.success) {
+                        setGamification({
+                            points: res.data.points,
+                            streak: res.data.streak,
+                            badges: res.data.badges
+                        });
+                    }
+                } catch (err) {
+                    console.error('Failed to sync gamification');
+                }
             }
         };
 
@@ -58,39 +88,8 @@ const Dashboard = () => {
 
         fetchHistory();
         fetchTip();
-
-        // Gamification Logic
-        const storedData = localStorage.getItem('careerCraftGamification');
-        const today = new Date().toLocaleDateString();
-
-        if (storedData) {
-            let parsed = JSON.parse(storedData);
-            const lastDate = new Date(parsed.lastLogin);
-            const currentDate = new Date(today);
-            const diffTime = Math.abs(currentDate - lastDate);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-
-            if (diffDays === 1) {
-                parsed.streak += 1;
-                parsed.points += 50; // Daily login bonus
-            } else if (diffDays > 1) {
-                parsed.streak = 1;
-            }
-            
-            parsed.lastLogin = today;
-            
-            if (parsed.points >= 500 && !parsed.badges.includes('Scholar 📚')) parsed.badges.push('Scholar 📚');
-            if (parsed.points >= 1000 && !parsed.badges.includes('Master 👑')) parsed.badges.push('Master 👑');
-            if (parsed.points >= 2000 && !parsed.badges.includes('Legend 🌟')) parsed.badges.push('Legend 🌟');
-
-            setGamification(parsed);
-            localStorage.setItem('careerCraftGamification', JSON.stringify(parsed));
-        } else {
-            const initialData = { points: 100, streak: 1, lastLogin: today, badges: ['Newcomer 🎯'] };
-            setGamification(initialData);
-            localStorage.setItem('careerCraftGamification', JSON.stringify(initialData));
-        }
-    }, []);
+        syncGamification();
+    }, [user]);
 
     const copyToClipboard = () => {
         const profileUrl = `${window.location.origin}/u/portfolio-generator`; // Example public link

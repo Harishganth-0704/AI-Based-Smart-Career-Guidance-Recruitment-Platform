@@ -179,10 +179,13 @@ const Assessment = () => {
     setResults(null);
 
     try {
-      const { getCareerRecommendations } = await import('../services/api');
+      const { getCareerRecommendations, updateStats } = await import('../services/api');
       const response = await getCareerRecommendations(answers.q3, answers.q7);
 
       if (response.success) {
+        // Award points for completing assessment
+        await updateStats({ points: 100 });
+
         // Transform backend response to match UI format
         const parsedResults = {
           analysis: "Our backend analyzed your skills and suggested these paths.",

@@ -38,6 +38,7 @@ exports.getRecommendations = async (req, res) => {
         if (data.success) {
             try {
                 const newAssessment = new Assessment({
+                    user: req.user._id, // Link to user
                     skills,
                     interests,
                     analysis: data.analysis,
@@ -196,6 +197,7 @@ exports.analyzeResume = async (req, res) => {
         if (data.bestFitRole) {
             try {
                 const newAssessment = new Assessment({
+                    user: req.user._id, // Link to user
                     skills: `Resume Analysis for ${targetRole}`,
                     interests: targetRole,
                     analysis: data.matchAnalysis,
@@ -216,7 +218,7 @@ exports.analyzeResume = async (req, res) => {
 
 exports.getHistory = async (req, res) => {
     try {
-        const assessments = await Assessment.find().sort({ createdAt: -1 });
+        const assessments = await Assessment.find({ user: req.user._id }).sort({ createdAt: -1 });
         res.json({ success: true, assessments });
     } catch (error) {
         console.error('History Fetch Error:', error);

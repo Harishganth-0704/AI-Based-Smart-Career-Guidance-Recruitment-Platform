@@ -48,4 +48,7 @@ router.post('/outreach', careerController.generateOutreach);
 // Route for Skill Quiz
 router.post('/skill-quiz', careerController.generateSkillQuiz);
 
+// Route for AI Job Match Score
+router.post('/job-match', careerController.getJobMatchScore);
+
 module.exports = router;

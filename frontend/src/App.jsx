@@ -68,6 +68,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import JobMatchScore from './pages/JobMatchScore';
 import { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 
@@ -159,6 +160,7 @@ function App() {
             <Route path="/skills/c" element={<CRoadmap />} />
             <Route path="/skills/golang" element={<GolangRoadmap />} />
             <Route path="/skills/bash" element={<BashRoadmap />} />
+            <Route path="/job-match" element={<ProtectedRoute><JobMatchScore /></ProtectedRoute>} />
 
 
 

@@ -89,6 +89,9 @@ const Navbar = () => {
               <NavLink to="/skill-quiz" className={({ isActive }) => (isActive ? 'dropdown-item active' : 'dropdown-item')} onClick={() => setIsMenuOpen(false)}>
                 Skill Assessment (Quiz)
               </NavLink>
+              <NavLink to="/job-match" className={({ isActive }) => (isActive ? 'dropdown-item active' : 'dropdown-item')} onClick={() => setIsMenuOpen(false)}>
+                🎯 Job Match Score
+              </NavLink>
             </div>
           </div>
 

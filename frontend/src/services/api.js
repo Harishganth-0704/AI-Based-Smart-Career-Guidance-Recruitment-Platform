@@ -204,4 +204,14 @@ export const toggleModuleProgress = async (moduleId) => {
     }
 };
 
+export const getJobMatchScore = async (mySkills, jobDescription) => {
+    try {
+        const response = await api.post('/career/job-match', { mySkills, jobDescription });
+        return response.data;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+    }
+};
+
 export default api;

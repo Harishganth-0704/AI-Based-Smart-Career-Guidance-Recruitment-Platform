@@ -523,3 +523,41 @@ exports.generateSkillQuiz = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+// @desc    AI Job Match Score — Compare resume skills vs job description
+// @route   POST /api/career/job-match
+// @access  Public
+exports.getJobMatchScore = async (req, res) => {
+    try {
+        const { mySkills, jobDescription } = req.body;
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+        const prompt = `
+            You are an expert ATS (Applicant Tracking System) and career coach.
+            A candidate has the following skills: "${mySkills}"
+            They are applying for a job with this description: "${jobDescription}"
+
+            Analyze the match and return ONLY a valid JSON object with this exact structure:
+            {
+                "matchScore": <integer 0-100>,
+                "matchedSkills": ["skill1", "skill2", "skill3"],
+                "missingSkills": ["gap1", "gap2", "gap3"],
+                "verdict": "One-sentence verdict on their candidacy strength.",
+                "improvementTip": "One actionable tip to improve their profile for this role."
+            }
+            Do not include markdown or backticks.
+        `;
+
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const text = response.text().trim().replace(/```json/g, '').replace(/```/g, '').trim();
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
+        const data = jsonMatch ? JSON.parse(jsonMatch[0]) : { success: false, message: "Failed to parse AI response" };
+
+        res.json({ success: true, ...data });
+    } catch (error) {
+        console.error('Job Match Score Error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};

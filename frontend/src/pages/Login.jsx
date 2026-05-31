@@ -48,6 +48,11 @@ const Login = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
+                        <div style={{ textAlign: 'right', marginTop: '6px' }}>
+                            <Link to="/forgot-password" style={{ fontSize: '0.85rem', color: '#00e676', textDecoration: 'none' }}>
+                                Forgot Password?
+                            </Link>
+                        </div>
                     </div>
                     <button type="submit" className="auth-btn">Sign In</button>
                 </form>

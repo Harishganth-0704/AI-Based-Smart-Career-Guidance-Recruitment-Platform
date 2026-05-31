@@ -45,8 +45,22 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     };
 
+    const updateProgress = async (moduleId) => {
+        if (!user) return;
+        try {
+            const { toggleModuleProgress } = await import('../services/api');
+            const data = await toggleModuleProgress(moduleId);
+            if (data.success) {
+                setUser({ ...user, completedModules: data.completedModules });
+                return data.completedModules;
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
+        <AuthContext.Provider value={{ user, loading, login, signup, logout, updateProgress }}>
             {children}
         </AuthContext.Provider>
     );

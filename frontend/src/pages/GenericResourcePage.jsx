@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 import ResourceStyles from './ResourceStyles';
 
 // Dynamic data for hackathon presentation to make each stage look realistic
@@ -168,6 +169,18 @@ const GenericResourcePage = () => {
     
     const formattedTitle = idToUse.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
+    const { user, updateProgress } = useContext(AuthContext);
+    const moduleId = `${idToUse}-${stageId}`;
+    const isCompleted = user?.completedModules?.includes(moduleId) || false;
+
+    const handleToggleComplete = async () => {
+        if (!user) {
+            alert('Please login to track your progress!');
+            return;
+        }
+        await updateProgress(moduleId);
+    };
+
     const defaultData = {
         topics: [
             `Core principles of ${formattedTitle} (Stage ${stageId})`,
@@ -245,10 +258,35 @@ const GenericResourcePage = () => {
         <>
             <style>{ResourceStyles}</style>
             <div className="resource-container">
-                <header className="resource-header">
-                    <h1>Stage {stageId}: {formattedTitle} Mastery</h1>
-                    <p>Curated resources, tutorials, and practical guides to master Stage {stageId} of the {formattedTitle} roadmap.</p>
-                    <Link to={basePath} className="back-link">← Back to {formattedTitle} Roadmap</Link>
+                <header className="resource-header" style={{ position: 'relative' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <div>
+                            <h1>Stage {stageId}: {formattedTitle} Mastery</h1>
+                            <p>Curated resources, tutorials, and practical guides to master Stage {stageId} of the {formattedTitle} roadmap.</p>
+                            <Link to={basePath} className="back-link">← Back to {formattedTitle} Roadmap</Link>
+                        </div>
+                        {user && (
+                            <button 
+                                onClick={handleToggleComplete}
+                                style={{
+                                    padding: '0.8rem 1.5rem',
+                                    borderRadius: '8px',
+                                    border: 'none',
+                                    background: isCompleted ? 'rgba(34, 197, 94, 0.2)' : 'rgba(255, 255, 255, 0.1)',
+                                    color: isCompleted ? '#4ade80' : '#fff',
+                                    fontWeight: 'bold',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.3s ease',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.5rem',
+                                    border: isCompleted ? '1px solid rgba(34, 197, 94, 0.5)' : '1px solid rgba(255, 255, 255, 0.2)'
+                                }}
+                            >
+                                {isCompleted ? '✅ Completed' : 'Mark as Complete'}
+                            </button>
+                        )}
+                    </div>
                 </header>
 
                 <div className="resource-grid">

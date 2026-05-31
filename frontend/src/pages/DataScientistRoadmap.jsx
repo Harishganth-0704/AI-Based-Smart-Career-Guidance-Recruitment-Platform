@@ -1,8 +1,9 @@
 // src/pages/DataScientistRoadmap.jsx
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import RecommendedChannels from '../components/RecommendedChannels';
+import { AuthContext } from '../context/AuthContext';
 
 const styles = `
 :root {
@@ -126,6 +127,29 @@ const styles = `
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(130, 88, 220, 0.4);
 }
+
+.progress-container {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  transition: width 0.5s ease;
+}
 `;
 
 const roadmapPhases = [
@@ -148,10 +172,20 @@ const roadmapPhases = [
 
 const DataScientistRoadmap = () => {
     const [activePhase, setActivePhase] = useState(null);
+    const { user } = useContext(AuthContext);
 
     const togglePhase = (phaseId) => {
         setActivePhase(activePhase === phaseId ? null : phaseId);
     };
+
+    const roadmapKey = 'data-scientist';
+    const completedPhasesCount = roadmapPhases.filter(phase => 
+        user?.completedModules?.includes(`${roadmapKey}-${phase.id}`)
+    ).length;
+    
+    const progressPercentage = roadmapPhases.length > 0 
+        ? Math.round((completedPhasesCount / roadmapPhases.length) * 100) 
+        : 0;
 
     return (
         <>
@@ -161,11 +195,32 @@ const DataScientistRoadmap = () => {
                     <h1>The Definitive Data Science Roadmap</h1>
                     <p>From novice to professional, this comprehensive 15-phase guide deconstructs the vast field of data science into a logical, progressive learning path, preparing you for a successful and impactful career.</p>
                 </header>
+
+                {user && (
+                    <div className="progress-container fade-in">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h3 style={{ margin: 0, color: 'var(--accent-primary)' }}>Your Progress</h3>
+                            <span style={{ fontWeight: 'bold', fontSize: '1.2rem' }}>{progressPercentage}%</span>
+                        </div>
+                        <div className="progress-bar-bg">
+                            <div className="progress-bar-fill" style={{ width: `${progressPercentage}%` }}></div>
+                        </div>
+                        <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem', color: 'var(--text-medium)' }}>
+                            {completedPhasesCount} of {roadmapPhases.length} phases completed
+                        </p>
+                    </div>
+                )}
+
                 <RecommendedChannels roadmapKey="data-scientist" />
-                {roadmapPhases.map(phase => (
-                    <div key={phase.id} className={`phase-card ${activePhase === phase.id ? 'active' : ''}`}>
+                {roadmapPhases.map(phase => {
+                    const isCompleted = user?.completedModules?.includes(`${roadmapKey}-${phase.id}`);
+                    return (
+                    <div key={phase.id} className={`phase-card ${activePhase === phase.id ? 'active' : ''}`} style={{ borderColor: isCompleted ? 'rgba(34, 197, 94, 0.5)' : 'var(--border-color)' }}>
                         <div className="phase-header" onClick={() => togglePhase(phase.id)}>
-                            <h2>{phase.title}</h2>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                <h2>{phase.title}</h2>
+                                {isCompleted && <span title="Completed" style={{ fontSize: '1.2rem' }}>✅</span>}
+                            </div>
                             <span className="phase-toggle">+</span>
                         </div>
                         {activePhase === phase.id && (
@@ -178,7 +233,8 @@ const DataScientistRoadmap = () => {
                             </div>
                         )}
                     </div>
-                ))}
+                    );
+                })}
             </div>
         </>
     );

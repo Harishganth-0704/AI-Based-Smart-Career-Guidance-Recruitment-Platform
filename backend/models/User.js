@@ -37,6 +37,16 @@ const userSchema = new mongoose.Schema({
         type: [String],
         default: ['Newcomer 🎯']
     },
+    completedModules: {
+        type: [String],
+        default: []
+    },
+    resetPasswordToken: {
+        type: String
+    },
+    resetPasswordExpire: {
+        type: Date
+    },
     createdAt: {
         type: Date,
         default: Date.now

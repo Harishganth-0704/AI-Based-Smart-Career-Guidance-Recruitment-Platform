@@ -193,4 +193,14 @@ export const getLeaderboard = async () => {
     }
 };
 
+export const toggleModuleProgress = async (moduleId) => {
+    try {
+        const response = await api.put('/auth/progress', { moduleId });
+        return response.data;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+    }
+};
+
 export default api;

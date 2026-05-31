@@ -66,6 +66,8 @@ import Leaderboard from './pages/Leaderboard';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 
@@ -88,6 +90,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password/:token" element={<ResetPassword />} />
               
               <Route path="/dashboard" element={
                 <ProtectedRoute>

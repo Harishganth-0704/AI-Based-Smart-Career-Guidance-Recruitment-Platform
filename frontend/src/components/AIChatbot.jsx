@@ -32,11 +32,14 @@ const AIChatbot = () => {
         setInput('');
         setLoading(true);
 
-        try {
-            const response = await axios.post('http://localhost:5001/api/career/chat', {
-                message: input,
-                history: messages.map(m => ({ sender: m.role === 'ai' ? 'bot' : 'user', text: m.text }))
-            });
+       try {
+    const response = await axios.post('https://ai-based-smart-career-guidance.onrender.com/api/career/chat', {
+        message: input,
+        history: messages.map(m => ({
+            sender: m.role === 'ai' ? 'bot' : 'user',
+            text: m.text
+        }))
+    });
 
             const aiMessage = { 
                 role: 'ai', 

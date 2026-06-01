@@ -3,6 +3,9 @@ import axios from 'axios';
 
 export const AuthContext = createContext();
 
+// Use environment variable for production, fallback to localhost for development
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -12,7 +15,7 @@ export const AuthProvider = ({ children }) => {
             const token = localStorage.getItem('token');
             if (token) {
                 try {
-                    const res = await axios.get('http://localhost:5001/api/auth/me', {
+                    const res = await axios.get(`${API_BASE_URL}/auth/me`, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                     setUser(res.data.data);
@@ -27,14 +30,14 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const login = async (email, password) => {
-        const res = await axios.post('http://localhost:5001/api/auth/login', { email, password });
+        const res = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
         localStorage.setItem('token', res.data.token);
         setUser(res.data);
         return res.data;
     };
 
     const signup = async (name, email, password) => {
-        const res = await axios.post('http://localhost:5001/api/auth/register', { name, email, password });
+        const res = await axios.post(`${API_BASE_URL}/auth/register`, { name, email, password });
         localStorage.setItem('token', res.data.token);
         setUser(res.data);
         return res.data;

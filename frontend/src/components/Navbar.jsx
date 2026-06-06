@@ -77,7 +77,10 @@ const Navbar = () => {
                 Interview Cheat Sheet
               </NavLink>
               <NavLink to="/salary-insight" className={({ isActive }) => (isActive ? 'dropdown-item active' : 'dropdown-item')} onClick={() => setIsMenuOpen(false)}>
-                Salary & Negotiation
+                Market Salary Insights
+              </NavLink>
+              <NavLink to="/salary-negotiation" className={({ isActive }) => (isActive ? 'dropdown-item active' : 'dropdown-item')} onClick={() => setIsMenuOpen(false)}>
+                🤝 HR Salary Negotiation
               </NavLink>
               <NavLink to="/outreach" className={({ isActive }) => (isActive ? 'dropdown-item active' : 'dropdown-item')} onClick={() => setIsMenuOpen(false)}>
                 Networking Suite
@@ -101,20 +104,11 @@ const Navbar = () => {
           <div className="auth-nav-links">
             {/* Notifications always visible */}
             <NotificationBell />
-
-            {user ? (
-              <div className="user-profile-nav">
-                <NavLink to="/profile" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} onClick={() => setIsMenuOpen(false)}>
-                  👤 {user.name.split(' ')[0]}
-                </NavLink>
-                <button onClick={handleLogout} className="logout-btn">Logout</button>
-              </div>
-            ) : (
-              <div className="guest-auth-links">
-                <NavLink to="/login" className="guest-login-link" onClick={() => setIsMenuOpen(false)}>Login</NavLink>
-                <NavLink to="/signup" className="guest-signup-link" onClick={() => setIsMenuOpen(false)}>Sign Up</NavLink>
-              </div>
-            )}
+            
+            {/* Direct Profile Link without auth requirement */}
+            <NavLink to="/profile" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} onClick={() => setIsMenuOpen(false)}>
+              👤 Profile
+            </NavLink>
           </div>
         </div>
 

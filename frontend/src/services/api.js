@@ -214,4 +214,14 @@ export const getJobMatchScore = async (mySkills, jobDescription) => {
     }
 };
 
+export const sendNegotiationMessage = async (role, company, targetSalary, messageHistory, userMessage) => {
+    try {
+        const response = await api.post('/career/negotiation-simulator', { role, company, targetSalary, messageHistory, userMessage });
+        return response.data;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+    }
+};
+
 export default api;

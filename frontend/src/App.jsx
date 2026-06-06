@@ -31,6 +31,7 @@ import HRDashboard from './pages/HRDashboard';
 import VideoScript from './pages/VideoScript';
 import CheatSheet from './pages/CheatSheet';
 import SalaryInsight from './pages/SalaryInsight';
+import SalaryNegotiation from './pages/SalaryNegotiation';
 import Outreach from './pages/Outreach';
 import Certificates from './pages/Certificates';
 import SkillQuiz from './pages/SkillQuiz';
@@ -108,6 +109,7 @@ function App() {
               <Route path="/video-script" element={<VideoScript />} />
               <Route path="/cheat-sheet" element={<CheatSheet />} />
               <Route path="/salary-insight" element={<SalaryInsight />} />
+              <Route path="/salary-negotiation" element={<SalaryNegotiation />} />
               <Route path="/outreach" element={<Outreach />} />
               <Route path="/certificates" element={<Certificates />} />
               <Route path="/skill-quiz" element={<SkillQuiz />} />

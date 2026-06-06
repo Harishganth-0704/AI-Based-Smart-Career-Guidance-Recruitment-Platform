@@ -44,40 +44,15 @@ const Profile = () => {
       .finally(() => setIsLoading(false));
   }, [user]);
 
-  // ── Guest View ──
-  if (!user && !isLoading) {
-    return (
-      <div className="profile-page" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '80vh' }}>
-        <div style={{
-          textAlign: 'center',
-          background: 'rgba(255,255,255,0.04)',
-          border: '1px solid rgba(130,88,220,0.3)',
-          borderRadius: '20px',
-          padding: '3rem 2.5rem',
-          maxWidth: '420px'
-        }}>
-          <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>👤</div>
-          <h2 style={{ color: '#f0f0f8', marginBottom: '0.5rem' }}>Your Profile</h2>
-          <p style={{ color: '#9090b0', marginBottom: '2rem', lineHeight: 1.6 }}>
-            Login or Sign Up to see your personalized profile, badges, skill progress, and activity.
-          </p>
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <Link to="/login" style={{
-              background: 'linear-gradient(135deg, #8258dc, #3a7bd5)',
-              color: '#fff', padding: '0.7rem 1.8rem',
-              borderRadius: '10px', textDecoration: 'none', fontWeight: 700
-            }}>Login</Link>
-            <Link to="/signup" style={{
-              background: 'rgba(130,88,220,0.15)',
-              border: '1px solid rgba(130,88,220,0.4)',
-              color: '#c4a7ff', padding: '0.7rem 1.8rem',
-              borderRadius: '10px', textDecoration: 'none', fontWeight: 700
-            }}>Sign Up</Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // ── Guest View Fallback ──
+  // If no user is present, we still render the profile using a mock "Guest User"
+  // so the website remains fully functional and accessible without login.
+  const displayUser = user || {
+    name: 'Guest Explorer',
+    points: 150,
+    streak: 3,
+    badges: ['Newcomer 🎯', 'Fast Learner ⚡']
+  };
 
   const shareProfile = () => {
     const url = `${window.location.origin}/profile`;
@@ -87,22 +62,21 @@ const Profile = () => {
     });
   };
 
-  if (!user) return null;
   if (isLoading) return (
     <div className="profile-loading">
       <div className="profile-loader" />
     </div>
   );
 
-  const initials = user.name
-    ? user.name.split(' ').map(w => w[0]).slice(0, 2).join('')
+  const initials = displayUser.name
+    ? displayUser.name.split(' ').map(w => w[0]).slice(0, 2).join('')
     : '?';
 
   const assessments   = history.filter(h => !h.skills?.includes('Resume'));
   const resumeScans   = history.filter(h =>  h.skills?.includes('Resume'));
-  const badges        = user.badges || ['Newcomer 🎯'];
-  const points        = user.points || 0;
-  const streak        = user.streak || 1;
+  const badges        = displayUser.badges || ['Newcomer 🎯'];
+  const points        = displayUser.points || 0;
+  const streak        = displayUser.streak || 1;
 
   // Build skill tags from latest assessment
   const latestSkills = assessments.length > 0
@@ -132,7 +106,7 @@ const Profile = () => {
         <div className="profile-avatar-row">
           <div className="profile-avatar">{initials}</div>
           <div className="profile-name-block">
-            <h1>{user.name}</h1>
+            <h1>{displayUser.name}</h1>
             <p className="profile-headline">
               🚀 Career Explorer · {points} XP · {streak} Day Streak
             </p>

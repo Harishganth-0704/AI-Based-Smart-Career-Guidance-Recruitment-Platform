@@ -608,3 +608,46 @@ exports.getResumeSuggestions = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+exports.negotiationSimulator = async (req, res) => {
+    try {
+        const { role, company, targetSalary, messageHistory, userMessage } = req.body;
+        
+        if (!process.env.GEMINI_API_KEY) {
+            return res.status(500).json({ success: false, message: 'API key not configured' });
+        }
+
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+        const systemContext = `
+            You are a tough, realistic, but professional HR Recruiter for a company named "${company}".
+            You are currently negotiating salary for the role of "${role}".
+            The candidate's hidden target salary is "${targetSalary}" (do not reveal you know this, but use it to gauge if their requests are reasonable).
+            
+            Guidelines:
+            1. Keep responses very short, 1-3 sentences maximum. Like a real chat message.
+            2. Start by lowballing the candidate slightly or asking for their expectations if they haven't given a number.
+            3. Push back on high demands using common HR reasons (budget constraints, market average, equity options instead).
+            4. If they negotiate well and give good reasons, you can concede a little bit.
+            5. If they accept an offer, or if you reach your absolute maximum limit, end the negotiation gracefully.
+            6. Do not break character. Do not use asterisks for actions. Just reply as the recruiter.
+        `;
+
+        let historyForPrompt = "";
+        if (messageHistory && messageHistory.length > 0) {
+            historyForPrompt = "Previous conversation:\n" + messageHistory.map(m => (m.sender === 'user' ? 'Candidate' : 'Recruiter') + ': ' + m.text).join("\n") + "\n\n";
+        }
+
+        const prompt = systemContext + "\n\n" + historyForPrompt + "Candidate: " + userMessage + "\nRecruiter:";
+
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const aiMessage = response.text().trim();
+
+        res.json({ success: true, text: aiMessage });
+    } catch (error) {
+        console.error('Negotiation Simulator Error:', error);
+        res.status(500).json({ success: false, message: 'Failed to generate recruiter response' });
+    }
+};

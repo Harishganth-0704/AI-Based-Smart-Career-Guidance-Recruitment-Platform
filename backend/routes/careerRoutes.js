@@ -57,4 +57,7 @@ router.post('/job-match', careerController.getJobMatchScore);
 // Route for AI Resume Content Suggestions
 router.post('/resume/suggestions', careerController.getResumeSuggestions);
 
+// Route for AI Salary Negotiation Simulator
+router.post('/negotiation-simulator', careerController.negotiationSimulator);
+
 module.exports = router;

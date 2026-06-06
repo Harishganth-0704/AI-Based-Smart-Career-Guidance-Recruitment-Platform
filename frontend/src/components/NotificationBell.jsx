@@ -102,7 +102,7 @@ const NotificationBell = () => {
       >
         <span className="bell-icon">🔔</span>
         {unreadCount > 0 && (
-          <span className="notif-badge">{unreadCount}</span>
+          <span className="notif-count-badge">{unreadCount}</span>
         )}
       </button>
 

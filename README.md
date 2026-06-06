@@ -34,32 +34,35 @@ Built specifically to solve real-world career confusion through dynamic roadmaps
 ## ✨ Key Features (The Super App Ecosystem)
 
 ### 📚 For Students & Job Seekers
-- **🧠 AI Career Assessment & Chatbot:** Get personalized career recommendations using Google Gemini AI.
-- **🗺️ Interactive Roadmaps & Progress Tracking:** Step-by-step paths for Data Science, AI Engineering, Full Stack, Cybersecurity, etc. **Now with dynamic progress bars and completion checkmarks!**
-- **🏆 Gamified Dashboard:** Earn points, maintain streaks, and collect badges (`Newcomer 🎯`, `Fast Learner ⚡`) by completing modules.
-- **📄 AI Resume Builder & ATS PDF Generator:** Create stunning, ATS-friendly resumes in seconds.
-- **💼 1-Click Portfolio Generator:** Instantly generate a live portfolio website from your profile data.
-- **🛠️ AI Career Toolbox:** 
-  - *GitHub Analyzer* (Code quality checks)
-  - *Video Resume Script Generator* (Perfect 60-second intros)
-  - *Salary Insight & Negotiation* (AI-powered market range)
-  - *Networking Suite* (Draft professional LinkedIn outreach)
-- **🔐 Secure Authentication:** JWT-based login, rate limiting, and an Email-based **Forgot Password** recovery system. New users even get an automated **Welcome Email**!
+*   **🧠 AI Career Assessment:** Get personalized career recommendations using Google Gemini AI.
+*   **🗺️ Interactive Roadmaps:** Step-by-step paths for Data Science, AI, Full Stack, Cybersecurity, etc., with dynamic progress tracking.
+*   **🏆 Gamified Experience:** Earn points, maintain streaks, and collect badges (`Newcomer 🎯`, `Fast Learner ⚡`) by completing learning modules.
+*   **📄 AI Resume Builder & ATS Generator:** Create stunning, ATS-friendly PDF resumes in seconds.
+*   **💼 1-Click Portfolio:** Instantly generate a live, beautifully designed portfolio website from your profile data.
+*   **🛠️ AI Career Toolbox:** 
+    *   **GitHub Analyzer:** Instant code quality checks and profile reviews.
+    *   **Video Resume Script Generator:** Perfect 60-second intro scripts.
+    *   **Salary Insight & Negotiation Simulator:** AI-powered market range checks and interactive HR negotiation practice.
+    *   **Networking Suite:** Draft professional LinkedIn outreach messages automatically.
+*   **🌍 100% Public Access:** No login required! The entire platform is open for guest users to explore seamlessly.
+*   **🔐 Secure Authentication:** JWT-based login, rate limiting, and an Email-based password recovery system.
 
 ### 🏢 For HR & Recruiters (B2B Portal)
-- **🔍 Smart Candidate Matchmaking:** Easily filter and find candidates who have completed specific roadmaps and verified skills.
-- **📊 Analytics Dashboard:** Track candidate progress, test scores, and overall platform engagement.
+*   **🔍 Smart Candidate Matchmaking:** Filter and find candidates based on verified skills and completed roadmaps.
+*   **📊 Analytics Dashboard:** Track candidate progress, test scores, and overall platform engagement.
 
 ---
 
 ## 🚀 Tech Stack & Architecture
 
-- **Frontend:** React 19, Vite 7, React Router 7, Vanilla CSS (Glassmorphism & Neon UI aesthetics)
-- **Backend:** Node.js, Express.js
-- **Database:** MongoDB (Mongoose ORM)
-- **AI Integration:** Google Gemini AI API
-- **Security:** `bcryptjs` (Password Hashing), `jsonwebtoken` (Auth), `helmet` (HTTP Headers), `express-rate-limit` (Anti-DDoS)
-- **Utilities:** `nodemailer` (Automated Emails), `python-pptx` & `reportlab` (Auto-generated Documentation)
+| Layer | Technologies Used |
+| :--- | :--- |
+| **Frontend** | React 19, Vite 7, React Router 7, Vanilla CSS (Glassmorphism UI) |
+| **Backend** | Node.js, Express.js |
+| **Database** | MongoDB (Mongoose ORM) |
+| **AI Integration** | Google Gemini AI API (`gemini-2.5-flash`) |
+| **Security** | `bcryptjs`, `jsonwebtoken`, `helmet`, `express-rate-limit` |
+| **Utilities** | `nodemailer` (Emails), `python-pptx`, `reportlab` |
 
 ---
 

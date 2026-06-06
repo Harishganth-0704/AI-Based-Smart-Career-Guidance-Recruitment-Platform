@@ -1,8 +1,97 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import api, { updateStats } from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import './Dashboard.css';
+
+/* ── Donut SVG Chart ── */
+const DonutChart = ({ pct, color, label, sublabel }) => {
+  const r = 36;
+  const circ = 2 * Math.PI * r;
+  const offset = circ - (pct / 100) * circ;
+  return (
+    <div className="analytics-card">
+      <div className="analytics-card-title">{label}</div>
+      <div className="donut-wrap">
+        <svg className="donut-svg" width="90" height="90" viewBox="0 0 90 90">
+          <circle className="donut-track" cx="45" cy="45" r={r} />
+          <circle
+            className="donut-fill"
+            cx="45" cy="45" r={r}
+            stroke={color}
+            strokeDasharray={circ}
+            strokeDashoffset={offset}
+          />
+          <text x="45" y="43" textAnchor="middle" className="donut-label">{pct}%</text>
+          <text x="45" y="55" textAnchor="middle" className="donut-sub">{sublabel}</text>
+        </svg>
+        <div className="donut-legend">
+          <div className="legend-item"><div className="legend-dot" style={{ background: color }} />{sublabel}</div>
+          <div className="legend-item"><div className="legend-dot" style={{ background: 'rgba(255,255,255,0.1)' }} />Remaining</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ── Bar Chart ── */
+const BarChart = ({ data, label }) => {
+  const max = Math.max(...data.map(d => d.val), 1);
+  return (
+    <div className="analytics-card">
+      <div className="analytics-card-title">{label}</div>
+      <div className="bar-chart-wrap">
+        {data.map((d, i) => (
+          <div key={i} className="bar-col">
+            <div className="bar-fill" style={{ height: `${(d.val / max) * 72}px` }} />
+            <div className="bar-label">{d.name}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+/* ── Heatmap ── */
+const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const Heatmap = ({ history }) => {
+  const today = new Date();
+  const getLevel = (daysAgo) => {
+    const target = new Date(today);
+    target.setDate(today.getDate() - daysAgo);
+    const dateStr = target.toLocaleDateString();
+    const count = history.filter(h => new Date(h.createdAt).toLocaleDateString() === dateStr).length;
+    if (count === 0) return 0;
+    if (count === 1) return 1;
+    if (count === 2) return 2;
+    if (count === 3) return 3;
+    return 4;
+  };
+
+  return (
+    <div className="heatmap-section">
+      <div className="heatmap-title">📅 Activity Heatmap — Last 4 Weeks</div>
+      <div className="heatmap-grid">
+        {DAYS.map((day, di) => (
+          <div key={di} className="heatmap-col">
+            {[3, 2, 1, 0].map(weekAgo => {
+              const daysAgo = weekAgo * 7 + (6 - di);
+              const level = getLevel(daysAgo);
+              return (
+                <div
+                  key={weekAgo}
+                  className={`heatmap-cell ${level > 0 ? `level-${level}` : ''}`}
+                  title={`${day}, ${weekAgo === 0 ? 'this week' : `${weekAgo}w ago`}: ${level} activities`}
+                />
+              );
+            })}
+            <div className="heatmap-day-label">{day}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const Dashboard = () => {
     const { user } = useContext(AuthContext);
@@ -18,10 +107,15 @@ const Dashboard = () => {
     });
 
     const [dailyTip, setDailyTip] = useState('TIP: Keep learning and building! | PULSE: 📈');
-    const [profileStrength, setProfileStrength] = useState(0);
+    const [profileStrength, setProfileStrength] = useState(20);
 
     useEffect(() => {
         const fetchHistory = async () => {
+            if (!user) {
+                // Guest mode — show empty dashboard without API call
+                setIsLoading(false);
+                return;
+            }
             try {
                 const response = await api.get('/career/history');
                 if (response.success) {
@@ -49,12 +143,11 @@ const Dashboard = () => {
             const today = new Date().toLocaleDateString();
             
             if (lastLogin !== today) {
-                // Check if it's a consecutive day
                 const diffTime = Math.abs(new Date(today) - new Date(lastLogin));
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                 
                 let newStreak = user.streak;
-                let bonusPoints = 50; // Daily login bonus
+                let bonusPoints = 50;
 
                 if (diffDays === 1) {
                     newStreak += 1;
@@ -177,8 +270,49 @@ const Dashboard = () => {
                 </div>
             </div>
 
+            {/* ── Analytics Section ── */}
+            <div className="analytics-section">
+                <div className="analytics-section-title">📊 Career Analytics</div>
+
+                <div className="analytics-grid">
+                    {/* Donut: Profile Strength */}
+                    <DonutChart
+                        pct={profileStrength}
+                        color="#00ff88"
+                        label="Profile Strength"
+                        sublabel="Complete"
+                    />
+
+                    {/* Donut: Assessments */}
+                    <DonutChart
+                        pct={Math.min(history.filter(h => !h.skills?.includes('Resume')).length * 20, 100)}
+                        color="#8258dc"
+                        label="Assessment Progress"
+                        sublabel="Assessments"
+                    />
+
+                    {/* Bar: Weekly Points */}
+                    <BarChart
+                        label="Weekly XP Breakdown"
+                        data={[
+                            { name: 'Mon', val: 20 },
+                            { name: 'Tue', val: 50 },
+                            { name: 'Wed', val: 30 },
+                            { name: 'Thu', val: 80 },
+                            { name: 'Fri', val: 60 },
+                            { name: 'Sat', val: 40 },
+                            { name: 'Sun', val: gamification.points > 0 ? Math.min(gamification.points, 100) : 10 },
+                        ]}
+                    />
+                </div>
+
+                {/* Activity Heatmap */}
+                <Heatmap history={history} />
+            </div>
+
             <div className="dashboard-grid">
                 {/* Stats Section */}
+
                 <div className="stats-card glass">
                     <h3>Summary</h3>
                     <div className="stat-item">

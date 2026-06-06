@@ -381,4 +381,241 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* ──────────────────────────────────────────────
+   AI RESUME SUGGESTIONS PANEL
+────────────────────────────────────────────── */
+.ai-suggestions-panel {
+    margin-top: 4rem;
+    background: linear-gradient(135deg, rgba(130, 88, 220, 0.08) 0%, rgba(0, 212, 255, 0.05) 100%);
+    border: 1px solid rgba(130, 88, 220, 0.25);
+    border-radius: 20px;
+    padding: 2.5rem;
+    animation: fadeInResult 0.5s ease-out;
+}
+
+.ai-sugg-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.ai-sugg-header h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #8258dc, #00d4ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.ai-sugg-header p {
+    color: #9090b0;
+    font-size: 0.95rem;
+}
+
+.ai-sugg-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+/* Section Tabs */
+.sugg-section-tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.sugg-tab {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #9090b0;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.sugg-tab:hover {
+    background: rgba(130, 88, 220, 0.12);
+    border-color: rgba(130, 88, 220, 0.4);
+    color: #c4a7ff;
+}
+
+.sugg-tab.active {
+    background: linear-gradient(135deg, rgba(130, 88, 220, 0.3), rgba(0, 212, 255, 0.2));
+    border-color: #8258dc;
+    color: #fff;
+    box-shadow: 0 0 14px rgba(130, 88, 220, 0.3);
+}
+
+/* Context Textarea */
+.sugg-context-input {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    color: #e0e0e0;
+    font-size: 0.9rem;
+    font-family: inherit;
+    resize: vertical;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+    line-height: 1.5;
+}
+
+.sugg-context-input:focus {
+    outline: none;
+    border-color: rgba(130, 88, 220, 0.5);
+    box-shadow: 0 0 12px rgba(130, 88, 220, 0.15);
+}
+
+/* Generate Button */
+.sugg-generate-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #8258dc, #3a7bd5);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.25s, box-shadow 0.25s;
+    box-shadow: 0 4px 20px rgba(130, 88, 220, 0.4);
+    font-family: inherit;
+    width: 100%;
+}
+
+.sugg-generate-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 28px rgba(130, 88, 220, 0.55);
+}
+
+.sugg-generate-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Spinner inside button */
+.sugg-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.sugg-error {
+    color: #ff6b6b;
+    font-size: 0.85rem;
+    text-align: center;
+    margin: 0;
+}
+
+/* Results List */
+.sugg-results {
+    margin-top: 1.5rem;
+    animation: fadeInResult 0.4s ease-out;
+}
+
+.sugg-results-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #7070a0;
+    margin-bottom: 1rem;
+}
+
+.sugg-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sugg-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    position: relative;
+}
+
+.sugg-item:hover {
+    background: rgba(130, 88, 220, 0.08);
+    border-color: rgba(130, 88, 220, 0.3);
+    transform: translateX(4px);
+}
+
+.sugg-item.copied {
+    background: rgba(0, 230, 118, 0.08);
+    border-color: rgba(0, 230, 118, 0.3);
+}
+
+.sugg-bullet-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.sugg-text {
+    flex: 1;
+    color: #d0d0f0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+}
+
+.sugg-copy-hint {
+    font-size: 0.68rem;
+    color: #5a5a78;
+    white-space: nowrap;
+    align-self: center;
+    flex-shrink: 0;
+    transition: color 0.2s;
+}
+
+.sugg-item.copied .sugg-copy-hint {
+    color: #00e676;
+    font-weight: 600;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .ai-suggestions-panel {
+        padding: 1.5rem 1rem;
+    }
+    .ai-sugg-header h2 {
+        font-size: 1.5rem;
+    }
+    .sugg-tab {
+        padding: 6px 14px;
+        font-size: 0.8rem;
+    }
+    .resume-builder-page {
+        padding: 3rem 4%;
+    }
+    .resume-builder-header h1 {
+        font-size: 2.2rem;
+    }
+}
+
+
 

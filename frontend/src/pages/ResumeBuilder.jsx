@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 import './ResumeBuilder.css';
 
 const careerRoles = [
@@ -141,6 +142,50 @@ const ResumeBuilder = () => {
 
     const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
     const [studyPlan, setStudyPlan] = useState(null);
+
+    // ── AI Resume Suggestions State ──
+    const [aiSection, setAiSection] = useState('Experience');
+    const [aiContext, setAiContext] = useState('');
+    const [aiSuggestions, setAiSuggestions] = useState([]);
+    const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+    const [suggestionsError, setSuggestionsError] = useState('');
+    const [copiedIdx, setCopiedIdx] = useState(null);
+
+    const RESUME_SECTIONS = ['Summary', 'Experience', 'Projects', 'Skills', 'Achievements'];
+
+    const handleGetSuggestions = async () => {
+        const role = getTargetRole();
+        if (!role.trim()) {
+            setSuggestionsError('Please select a target role first.');
+            return;
+        }
+        setSuggestionsError('');
+        setIsLoadingSuggestions(true);
+        setAiSuggestions([]);
+        try {
+            const res = await api.post('/career/resume/suggestions', {
+                targetRole: role,
+                section: aiSection,
+                context: aiContext,
+            });
+            if (res.success && res.suggestions?.length) {
+                setAiSuggestions(res.suggestions);
+            } else {
+                setSuggestionsError('Could not generate suggestions. Try again.');
+            }
+        } catch (err) {
+            setSuggestionsError('Failed to connect. Please ensure you are logged in.');
+        } finally {
+            setIsLoadingSuggestions(false);
+        }
+    };
+
+    const copyBullet = (text, idx) => {
+        navigator.clipboard.writeText(text).then(() => {
+            setCopiedIdx(idx);
+            setTimeout(() => setCopiedIdx(null), 1800);
+        });
+    };
 
     const handleGenerateStudyPlan = async () => {
         if (!analysisResult || !analysisResult.gapAnalysis) return;
@@ -290,6 +335,74 @@ const ResumeBuilder = () => {
                      </div>
                 </div>
             )}
+
+            {/* ── AI Resume Suggestions Panel ── */}
+            <div className="ai-suggestions-panel">
+                <div className="ai-sugg-header">
+                    <h2>✨ AI Content Suggestions</h2>
+                    <p>Get Gemini-powered bullet points for any resume section — tailored to your target role.</p>
+                </div>
+
+                <div className="ai-sugg-controls">
+                    <div className="sugg-section-tabs">
+                        {RESUME_SECTIONS.map(sec => (
+                            <button
+                                key={sec}
+                                className={`sugg-tab ${aiSection === sec ? 'active' : ''}`}
+                                onClick={() => { setAiSection(sec); setAiSuggestions([]); setSuggestionsError(''); }}
+                                type="button"
+                            >
+                                {sec}
+                            </button>
+                        ))}
+                    </div>
+
+                    <textarea
+                        className="sugg-context-input"
+                        placeholder={`Optional: add context for your ${aiSection} (e.g. "Built an e-commerce app with React and Node.js")`}
+                        value={aiContext}
+                        onChange={e => setAiContext(e.target.value)}
+                        rows={3}
+                    />
+
+                    <button
+                        className="sugg-generate-btn"
+                        onClick={handleGetSuggestions}
+                        disabled={isLoadingSuggestions}
+                        type="button"
+                    >
+                        {isLoadingSuggestions
+                            ? <><span className="sugg-spinner" /> Generating…</>
+                            : `🤖 Generate ${aiSection} Bullets`}
+                    </button>
+
+                    {suggestionsError && <p className="sugg-error">{suggestionsError}</p>}
+                </div>
+
+                {aiSuggestions.length > 0 && (
+                    <div className="sugg-results">
+                        <div className="sugg-results-title">📋 Click any bullet to copy it:</div>
+                        <ul className="sugg-list">
+                            {aiSuggestions.map((s, i) => (
+                                <li
+                                    key={i}
+                                    className={`sugg-item ${copiedIdx === i ? 'copied' : ''}`}
+                                    onClick={() => copyBullet(s, i)}
+                                >
+                                    <span className="sugg-bullet-icon">
+                                        {copiedIdx === i ? '✅' : '📌'}
+                                    </span>
+                                    <span className="sugg-text">{s}</span>
+                                    <span className="sugg-copy-hint">
+                                        {copiedIdx === i ? 'Copied!' : 'Click to copy'}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+            </div>
+
         </div>
     );
 };

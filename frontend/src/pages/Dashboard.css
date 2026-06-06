@@ -353,8 +353,285 @@
     align-items: center;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
+    .dashboard-top-row {
+        grid-template-columns: 1fr;
+    }
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
+    .gamification-stats {
+        gap: 1.5rem;
+    }
+    .gamification-banner {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+        padding: 1.2rem;
+    }
+    .gamification-badges {
+        text-align: center;
+    }
+    .badge-list {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
 }
+
+/* ──────────────────────────────────────────
+   ANALYTICS SECTION
+────────────────────────────────────────── */
+.analytics-section {
+    margin: 2rem 0;
+}
+
+.analytics-section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #00ff88;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* ── Donut Chart Card ── */
+.analytics-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: border-color 0.3s, transform 0.3s;
+}
+.analytics-card:hover {
+    border-color: rgba(0, 255, 136, 0.25);
+    transform: translateY(-3px);
+}
+
+.analytics-card-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #7070a0;
+    margin-bottom: 1rem;
+}
+
+/* Donut */
+.donut-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.donut-svg { flex-shrink: 0; }
+
+.donut-track {
+    fill: none;
+    stroke: rgba(255,255,255,0.07);
+    stroke-width: 8;
+}
+
+.donut-fill {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.donut-label {
+    font-size: 1rem;
+    font-weight: 800;
+    fill: #f0f0f0;
+}
+.donut-sub {
+    font-size: 0.55rem;
+    fill: #7070a0;
+}
+
+.donut-legend {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: #9090b0;
+}
+.legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Bar Chart */
+.bar-chart-wrap {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 90px;
+}
+
+.bar-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    flex: 1;
+}
+
+.bar-fill {
+    width: 100%;
+    border-radius: 5px 5px 0 0;
+    background: linear-gradient(180deg, #8258dc, #3a7bd5);
+    transition: height 1s ease;
+    min-height: 4px;
+}
+
+.bar-label {
+    font-size: 0.6rem;
+    color: #6060a0;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Stat Number Cards */
+.stat-number-card {
+    text-align: center;
+    padding: 0.5rem 0;
+}
+
+.stat-big-num {
+    font-size: 2.8rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #00ff88, #00d4ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin-bottom: 6px;
+}
+
+.stat-big-label {
+    font-size: 0.8rem;
+    color: #7070a0;
+    font-weight: 600;
+}
+
+.stat-big-sub {
+    font-size: 0.7rem;
+    color: #4a4a6a;
+    margin-top: 2px;
+}
+
+/* ── Weekly Heatmap ── */
+.heatmap-section {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.heatmap-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #7070a0;
+    margin-bottom: 1rem;
+}
+
+.heatmap-grid {
+    display: flex;
+    gap: 6px;
+    align-items: flex-end;
+}
+
+.heatmap-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+}
+
+.heatmap-cell {
+    width: 28px;
+    height: 28px;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: default;
+}
+.heatmap-cell:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 10px rgba(0,255,136,0.4);
+}
+.heatmap-cell.level-1 { background: rgba(0, 255, 136, 0.15); border-color: rgba(0,255,136,0.2); }
+.heatmap-cell.level-2 { background: rgba(0, 255, 136, 0.35); border-color: rgba(0,255,136,0.4); }
+.heatmap-cell.level-3 { background: rgba(0, 255, 136, 0.60); border-color: rgba(0,255,136,0.7); }
+.heatmap-cell.level-4 { background: rgba(0, 255, 136, 0.90); border-color: #00ff88; }
+
+.heatmap-day-label {
+    font-size: 0.62rem;
+    color: #5a5a7a;
+    margin-top: 4px;
+}
+
+/* ── Loader ── */
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(0,255,136,0.15);
+    border-top-color: #00ff88;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Responsive Analytics ── */
+@media (max-width: 900px) {
+    .analytics-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .heatmap-cell {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+@media (max-width: 600px) {
+    .analytics-grid {
+        grid-template-columns: 1fr;
+    }
+    .dashboard-container {
+        padding: 1rem 4%;
+    }
+    .dashboard-header h1 {
+        font-size: 2rem;
+    }
+    .heatmap-grid {
+        gap: 4px;
+    }
+    .heatmap-cell {
+        width: 18px;
+        height: 18px;
+        border-radius: 3px;
+    }
+}
+

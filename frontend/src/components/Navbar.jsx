@@ -3,6 +3,7 @@
 import React, { useState, useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import NotificationBell from './NotificationBell';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -31,11 +32,9 @@ const Navbar = () => {
           <NavLink to="/" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} onClick={() => setIsMenuOpen(false)}>
             Home
           </NavLink>
-          {user && (
-            <NavLink to="/dashboard" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} onClick={() => setIsMenuOpen(false)}>
-              Dashboard
-            </NavLink>
-          )}
+          <NavLink to="/dashboard" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} onClick={() => setIsMenuOpen(false)}>
+            Dashboard
+          </NavLink>
 
           {/* ... existing dropdowns ... */}
           <div className="dropdown">
@@ -100,16 +99,21 @@ const Navbar = () => {
           </NavLink>
           
           <div className="auth-nav-links">
+            {/* Notifications always visible */}
+            <NotificationBell />
+
             {user ? (
               <div className="user-profile-nav">
-                <span className="user-name">Hi, {user.name.split(' ')[0]}</span>
+                <NavLink to="/profile" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')} onClick={() => setIsMenuOpen(false)}>
+                  👤 {user.name.split(' ')[0]}
+                </NavLink>
                 <button onClick={handleLogout} className="logout-btn">Logout</button>
               </div>
             ) : (
-              <>
-                <NavLink to="/login" className="nav-link login-link" onClick={() => setIsMenuOpen(false)}>Login</NavLink>
-                <NavLink to="/signup" className="nav-btn signup-btn" onClick={() => setIsMenuOpen(false)}>Get Started</NavLink>
-              </>
+              <div className="guest-auth-links">
+                <NavLink to="/login" className="guest-login-link" onClick={() => setIsMenuOpen(false)}>Login</NavLink>
+                <NavLink to="/signup" className="guest-signup-link" onClick={() => setIsMenuOpen(false)}>Sign Up</NavLink>
+              </div>
             )}
           </div>
         </div>

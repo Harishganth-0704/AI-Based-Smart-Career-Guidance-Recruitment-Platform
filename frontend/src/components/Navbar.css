@@ -337,5 +337,56 @@
     width: 80%;
     text-align: center;
   }
+
+  .guest-auth-links {
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+  }
 }
+
+/* ── Guest Auth Links (subtle, optional) ── */
+.guest-auth-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.guest-login-link {
+  color: #9090b0;
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.guest-login-link:hover {
+  color: #d0d0f0;
+  border-color: rgba(130,88,220,0.4);
+  background: rgba(130,88,220,0.08);
+}
+
+.guest-signup-link {
+  color: #c4a7ff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(130,88,220,0.35);
+  background: rgba(130,88,220,0.1);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.guest-signup-link:hover {
+  background: rgba(130,88,220,0.2);
+  border-color: rgba(130,88,220,0.6);
+  color: #fff;
+}
+
 

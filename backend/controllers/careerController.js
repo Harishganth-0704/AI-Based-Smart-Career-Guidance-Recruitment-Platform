@@ -34,11 +34,11 @@ exports.getRecommendations = async (req, res) => {
         const jsonMatch = text.match(/\{[\s\S]*\}/);
         const data = jsonMatch ? JSON.parse(jsonMatch[0]) : { success: false, message: "Failed to parse AI response" };
 
-        // Save to Database
-        if (data.success) {
+        // Save to Database only if user is logged in
+        if (data.success && req.user) {
             try {
                 const newAssessment = new Assessment({
-                    user: req.user._id, // Link to user
+                    user: req.user._id,
                     skills,
                     interests,
                     analysis: data.analysis,
@@ -193,11 +193,11 @@ exports.analyzeResume = async (req, res) => {
         const jsonMatch = text.match(/\{[\s\S]*\}/);
         const data = jsonMatch ? JSON.parse(jsonMatch[0]) : { success: false, message: "Failed to parse AI response" };
 
-        // Save to Database
-        if (data.bestFitRole) {
+        // Save to Database only if user is logged in
+        if (data.bestFitRole && req.user) {
             try {
                 const newAssessment = new Assessment({
-                    user: req.user._id, // Link to user
+                    user: req.user._id,
                     skills: `Resume Analysis for ${targetRole}`,
                     interests: targetRole,
                     analysis: data.matchAnalysis,
@@ -218,6 +218,10 @@ exports.analyzeResume = async (req, res) => {
 
 exports.getHistory = async (req, res) => {
     try {
+        // If no user (guest), return empty history
+        if (!req.user) {
+            return res.json({ success: true, assessments: [] });
+        }
         const assessments = await Assessment.find({ user: req.user._id }).sort({ createdAt: -1 });
         res.json({ success: true, assessments });
     } catch (error) {
@@ -558,6 +562,49 @@ exports.getJobMatchScore = async (req, res) => {
         res.json({ success: true, ...data });
     } catch (error) {
         console.error('Job Match Score Error:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// @desc    AI Resume Content Suggestions — Generate bullet points for a resume section
+// @route   POST /api/career/resume/suggestions
+// @access  Private (protected)
+exports.getResumeSuggestions = async (req, res) => {
+    try {
+        const { targetRole, section, context } = req.body;
+
+        if (!targetRole || !section) {
+            return res.status(400).json({ success: false, message: 'targetRole and section are required.' });
+        }
+
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+
+        const prompt = `
+            You are an expert resume writer and career coach.
+            Generate exactly 5 powerful, ATS-optimized resume bullet points for the "${section}" section of a resume targeting the role: "${targetRole}".
+            ${context ? `Additional context from the user: "${context}"` : ''}
+
+            Requirements:
+            - Start each bullet with a strong action verb (e.g., Developed, Led, Architected, Optimized)
+            - Include quantifiable achievements where possible (%, $, time saved, etc.)
+            - Keep each bullet to 1-2 lines max
+            - Tailor specifically for ${targetRole}
+
+            Return ONLY a valid JSON array of exactly 5 strings. No markdown, no explanation.
+            Example format: ["Bullet 1...", "Bullet 2...", "Bullet 3...", "Bullet 4...", "Bullet 5..."]
+        `;
+
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        let text = response.text().trim().replace(/```json/g, '').replace(/```/g, '').trim();
+
+        const jsonMatch = text.match(/\[[\s\S]*\]/);
+        const suggestions = jsonMatch ? JSON.parse(jsonMatch[0]) : [];
+
+        res.json({ success: true, suggestions });
+    } catch (error) {
+        console.error('Resume Suggestions Error:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 };

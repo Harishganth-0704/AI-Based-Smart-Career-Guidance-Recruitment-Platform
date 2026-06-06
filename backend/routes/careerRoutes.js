@@ -1,12 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const careerController = require('../controllers/careerController');
-const { protect } = require('../middleware/authMiddleware');
+const { optionalAuth } = require('../middleware/authMiddleware');
 const multer = require('multer');
 const upload = multer({ storage: multer.memoryStorage() });
 
+// Apply optional auth globally — req.user = user if logged in, null if guest
+router.use(optionalAuth);
+
 // Route to get career recommendations based on skills
-router.post('/recommend', protect, careerController.getRecommendations);
+router.post('/recommend', careerController.getRecommendations);
 
 // Route for the chatbot
 router.post('/chat', careerController.chat);
@@ -17,8 +20,8 @@ router.get('/jobs', careerController.getJobs);
 // Route to analyze resume
 router.post('/resume/analyze', upload.single('resume'), careerController.analyzeResume);
 
-// Route to get assessment history
-router.get('/history', protect, careerController.getHistory);
+// Route to get assessment history (returns empty array for guests)
+router.get('/history', careerController.getHistory);
 
 // Routes for Mock Interview
 router.post('/interview/start', careerController.startInterview);
@@ -50,5 +53,8 @@ router.post('/skill-quiz', careerController.generateSkillQuiz);
 
 // Route for AI Job Match Score
 router.post('/job-match', careerController.getJobMatchScore);
+
+// Route for AI Resume Content Suggestions
+router.post('/resume/suggestions', careerController.getResumeSuggestions);
 
 module.exports = router;

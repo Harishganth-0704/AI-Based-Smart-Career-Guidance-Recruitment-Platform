@@ -213,13 +213,25 @@ exports.forgotPassword = async (req, res) => {
         // Build the reset URL
         const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password/${resetToken}`;
 
+        // Check email credentials before trying to send
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+            console.error('EMAIL_USER or EMAIL_PASS not set in environment variables!');
+            // Clear token since we can't send email
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpire = undefined;
+            await user.save({ validateBeforeSave: false });
+            return res.status(500).json({ success: false, message: 'Email service not configured. Please contact support.' });
+        }
+
         // Send Email via Nodemailer
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
                 user: process.env.EMAIL_USER,
                 pass: process.env.EMAIL_PASS
-            }
+            },
+            connectionTimeout: 10000, // 10 seconds
+            socketTimeout: 10000      // 10 seconds
         });
 
         const mailOptions = {

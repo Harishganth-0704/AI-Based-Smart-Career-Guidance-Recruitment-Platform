@@ -63,21 +63,13 @@ import Leaderboard from './pages/Leaderboard';
 
 // --- Import All Resource Pages ---
 
-import { AuthProvider, AuthContext } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import JobMatchScore from './pages/JobMatchScore';
-import { useContext } from 'react';
-import { Navigate } from 'react-router-dom';
-
-const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useContext(AuthContext);
-  if (loading) return <div className="loading-screen">Loading...</div>;
-  if (!user) return <Navigate to="/login" />;
-  return children;
-};
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -94,17 +86,8 @@ function App() {
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password/:token" element={<ResetPassword />} />
               
-              <Route path="/dashboard" element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              } />
-              
-              <Route path="/assessment" element={
-                <ProtectedRoute>
-                  <Assessment />
-                </ProtectedRoute>
-              } />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/assessment" element={<Assessment />} />
 
               <Route path="/roadmaps" element={<Roadmap />} />
               <Route path="/skill-roadmap" element={<SkillRoadmap />} />
@@ -129,6 +112,7 @@ function App() {
               <Route path="/certificates" element={<Certificates />} />
               <Route path="/skill-quiz" element={<SkillQuiz />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/profile" element={<Profile />} />
 
             {/* --- Main Job-Based Roadmap Routes --- */}
             <Route path="/data-scientist" element={<DataScientistRoadmap />} />
@@ -160,7 +144,7 @@ function App() {
             <Route path="/skills/c" element={<CRoadmap />} />
             <Route path="/skills/golang" element={<GolangRoadmap />} />
             <Route path="/skills/bash" element={<BashRoadmap />} />
-            <Route path="/job-match" element={<ProtectedRoute><JobMatchScore /></ProtectedRoute>} />
+            <Route path="/job-match" element={<JobMatchScore />} />
 
 
 

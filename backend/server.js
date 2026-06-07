@@ -14,6 +14,8 @@ app.set('trust proxy', 1);
 // CORS Configuration - Allow Vercel frontend
 const allowedOrigins = [
     'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:5175',
     'http://localhost:3000',
     process.env.FRONTEND_URL,
     'https://ai-based-smart-career-guidance-recr.vercel.app'
